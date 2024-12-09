@@ -1,0 +1,28 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+<div class="col-lg-4 col-6 text-left">
+    <form action="{% url "search"%}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for products" name = "searched">
+            <div class="input-group-append">
+                <span class="input-group-text bg-transparent text-primary">
+                    <button class="btn btn-primary">Search</button>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if searched %}
+    {% for product in searched %}
+       <h1>{{product.name}}</h1>
+       <img src ="{{product.product_image.url}}">
+
+    {% endfor %}
+
+{% endif %}
+
+
+
