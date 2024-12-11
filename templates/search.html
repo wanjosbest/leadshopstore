@@ -6,7 +6,7 @@
             <input type="text" class="form-control" placeholder="Search for products" name = "searched">
             <div class="input-group-append">
                 <span class="input-group-text bg-transparent text-primary">
-                    <button class="btn btn-primary">Search</button>
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </span>
             </div>
         </div>
@@ -15,7 +15,7 @@
 {% if searched %}
     {% for result in searched %}
        <h1>{{result.name}}</h1>
-       <img src ="{{result.product_image.url}}">
+       <img src ="{{result.product_image.image.url}}">
 
     {% endfor %}
 

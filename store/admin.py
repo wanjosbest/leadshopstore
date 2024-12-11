@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import (User, category, Products, subcategory,carousel,special_offer,featured_products)
+from .models import (User, category, Products, subcategory,carousel,special_offer,featured_products, Product_image)
 
 admin.site.register(User)
 admin.site.register(category)
+admin.site.register(Product_image)
 
 admin.site.register(subcategory)
 

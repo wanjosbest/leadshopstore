@@ -22,7 +22,12 @@ class User(AbstractUser):
 
 class category(models.Model):
     name = models.CharField(max_length=30, null = True)
-    image = models.ImageField(upload_to ="img",null=True)
+   
+    def __str__(self):
+        return self.name
+class Product_image(models.Model):
+    name = models.CharField(max_length=50, null=True,unique=True)
+    image = models.ImageField(upload_to="img", null=True,unique=True)
     
     def __str__(self):
         return self.name
@@ -30,22 +35,28 @@ class category(models.Model):
 class subcategory(models.Model):
     category = models.ForeignKey(category, related_name="subcategory", on_delete= models.CASCADE, null=True)
     sub_category_name = models.CharField(max_length=30,null=True, unique=True, verbose_name="name")
+    image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="sub_category_image", null=True)
     
     def __str__(self):
         return f"{self.sub_category_name} in {self.category} Category"
     
 class Products(models.Model):
+    STATUS_CHOICES = (
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+    )
     category = models.ForeignKey(category, related_name="product_category",on_delete=models.CASCADE,null=True)
     name = models.CharField(max_length=50, null =True)
     description = models.TextField(null =True)
     meta_keywords = models.CharField(max_length=255, null =True, help_text="seo keywords seprated with comma")
     meta_descriptions = models.TextField(null =True, help_text="seo descriptions here ")
-    product_image = models.ImageField(upload_to ="img")
+    product_image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="Product_image")
     published = models.DateTimeField(auto_now_add =True, null=True)
     updated = models.DateTimeField(auto_now=True,null=True)
     slug = models.SlugField(null=True, max_length=100,unique=True)
     actualprice = models.CharField(max_length=20,null=True)
     discountedprice = models.CharField(max_length=20,null=True)
+    status = models.CharField(max_length=30, null =True,choices = STATUS_CHOICES,default="published")
     
     def __str__(self):
         return f"{self.name} "
@@ -89,7 +100,7 @@ class special_offer(models.Model):
 class featured_products(models.Model):
     product =models.ForeignKey(Products, related_name="featured_image_products",on_delete=models.CASCADE, null=True)
     name =models.CharField(max_length=100,null=True)
-    image =models.ImageField(upload_to = "img", null=True)
+    image =models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="fetured_product_image", null=True)
     actualprice = models.CharField(max_length=20,null=True)
     discountedprice = models.CharField(max_length=20,null=True)
     def __str__(self):

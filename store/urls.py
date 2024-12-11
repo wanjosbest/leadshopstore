@@ -10,7 +10,7 @@ urlpatterns =[
      path("change-password/", views.ChangePasswordView.as_view(), name="changepassword"),
      path("", views.index, name="index"),
      path("search/", views.search, name="search"),
-     path("category/<category>/", views.product_category, name="product_category"),
+     path("category/<sub_category>/", views.product_category, name="product_category"),
      path("product-list", views.product_listView, name = "product_list"),
      path("product-details/<slug>/", views.product_detailView, name="product_detail"),
      path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
@@ -20,5 +20,6 @@ urlpatterns =[
      path("shop", views.shop, name="shop"),
      path("shop-details", views.shopdetails, name="shopdetails"),
      path("contact-us", views.contact, name="contact-us"),
+    
     
 ]

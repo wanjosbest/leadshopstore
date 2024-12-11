@@ -1,5 +1,3 @@
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
 
 <div class="col-lg-4 col-6 text-left">
     <form action="{% url "search"%}" method="POST">
@@ -14,15 +12,11 @@
         </div>
     </form>
 </div>
-
 {% if searched %}
-    {% for product in searched %}
-       <h1>{{product.name}}</h1>
-       <img src ="{{product.product_image.url}}">
+    {% for result in searched %}
+       <h1>{{result.name}}</h1>
+       <img src ="{{result.product_image.image.url}}">
 
     {% endfor %}
 
 {% endif %}
-
-
-

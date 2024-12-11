@@ -1,13 +1,11 @@
-{% extends "base.html" %}
-{% block header %}
+
 <meta charset="utf-8">
 <title>Lead Store - Online Shop for business owners</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<meta content="Wanjos Site" name="keywords">
-<meta content="WanjosSite descriptions" name="description">
+
 
 <!-- Favicon -->
-<link href="media/img/favicon.ico" rel="icon">
+<link href="/media/img/favicon.ico" rel="icon">
 
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -17,13 +15,12 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
 <!-- Libraries Stylesheet -->
-<link href="static/lib/animate/animate.min.css" rel="stylesheet">
-<link href="static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+<link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
-<link href="static/css/style.css" rel="stylesheet">
-{% endblock%}
-{% block body %}
+<link href="/static/css/style.css" rel="stylesheet">
+
 <!-- Topbar Start -->
 <div class="container-fluid">
     <div class="row bg-secondary py-1 px-xl-5">
@@ -40,8 +37,9 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">Sign in</button>
-                        <button class="dropdown-item" type="button">Sign up</button>
+                       <a href="{% url "login"%}"> <button class="dropdown-item" type="button">Sign in</button></a>
+                       <a href="{% url "register"%}">  <button class="dropdown-item" type="button">Sign up</button></a>
+                       
                     </div>
                 </div>
                 <div class="btn-group mx-2">
@@ -80,7 +78,7 @@
                 <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Store</span>
             </a>
         </div>
-      {% include "search.html"%}
+       {%include "search.html"%}
         <div class="col-lg-4 col-6 text-right">
             <p class="m-0">Customer Service</p>
             <h5 class="m-0">+234-8033586158</h5>
@@ -160,4 +158,3 @@
 </div>
 <!-- Navbar End -->
 
-{% endblock%}

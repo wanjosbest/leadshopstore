@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse, redirect
-from .models import User,Products, carousel,special_offer,category,featured_products
+from .models import User,Products, carousel,special_offer,category,featured_products,subcategory
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 def index(request):
     getcouroseldetails = carousel.objects.all()
     getspecialoffers = special_offer.objects.all()
-    getcategory = category.objects.all()
+    getcategory = subcategory.objects.all()
     getfeaturedproducts = featured_products.objects.all()
     #get recent products
     getrecentproduct = Products.objects.all().order_by("-published")
@@ -109,11 +109,11 @@ def search(request):
     
 # get posts by category
 
-def product_category(request, category):
-    products = Products.objects.filter(category__name__icontains = category)
+def product_category(request, sub_category):
+    products = Products.objects.filter(category__name__icontains = sub_category)
     context = {
         
-        'category':category, "products":products
+        'category':sub_category, "products":products
     }
     
     return render (request, "products/category.html", context)
