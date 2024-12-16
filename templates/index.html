@@ -113,23 +113,21 @@
   <!-- Categories Start -->
   
   <div class="container-fluid pt-5">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> Sub Categories</span></h2>
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3"> Categories</span></h2>
     <div class="row px-xl-5 pb-3">
       {% for category in getcategory %}
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            
                 <div class="cat-item d-flex align-items-center mb-4">
-                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                        <img class="img-fluid" src="{{category.image.image.url}}" alt="{{category.sub_category_name}}">
-                    </div>
+                    
                     <div class="flex-fill pl-3">
-                        <h6>{{category.sub_category_name}}</h6>
-                        {% for productlist in productlist %}
-                        <small class="text-body">{{productlist}} Products</small>
+                        <h4>{{category.name}}</h4>
+                        {% for subcategory in category.subcategory.all %}
+                        <li><a href="{% url "category_detail" subcategory.id %}">{{subcategory.sub_category_name}}</a></li>
                         {% endfor %}
                     </div>
                 </div>
-            </a>
+            
         </div>
         {% endfor %}
     </div>
@@ -145,7 +143,7 @@
       <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
           <div class="product-item bg-light mb-4">
               <div class="product-img position-relative overflow-hidden">
-                  <img class="img-fluid w-100" src="{{featuredproducts.image.url}}" alt="">
+                  <img class="img-fluid w-100" src="{{featuredproducts.image.image.url}}" alt="">
                   <div class="product-action">
                       <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
                       <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -218,7 +216,7 @@
                     </div>
                 </div>
                 <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">{{recent.name}}</a>
+                    <a class="h6 text-decoration-none text-truncate" href="{{recent.get_absolute_url}}">{{recent.name}}</a>
                     <div class="d-flex align-items-center justify-content-center mt-2">
                         <h5>{{recent.discountedprice}}</h5><h6 class="text-muted ml-2"><del>{{recent.actualprice}}</del></h6>
                     </div>

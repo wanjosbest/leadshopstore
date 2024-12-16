@@ -1,7 +1,9 @@
-<h1>{{category}} category</h1>
-{% for PRODUCTS in products %}
-  
-  <h2>
-    <a href="{{PRODUCTS.get_absolute_url}}">{{PRODUCTS.name}}</a>
-  </h2>
-{% endfor%}
+{% for category in all_subcategory %}
+<h3>{{category.name}}</h3>
+<ul>
+{% for subcategory in category.subcategory.all %}
+<li>{{subcategory.sub_category_name}}</li>
+{% endfor %}
+
+</ul>
+{% endfor %}

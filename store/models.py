@@ -22,6 +22,8 @@ class User(AbstractUser):
 
 class category(models.Model):
     name = models.CharField(max_length=30, null = True)
+    image = models.ImageField(upload_to="img", null=True,unique=True)  
+    slug = models.SlugField(null=True, max_length=100,unique=True)
    
     def __str__(self):
         return self.name
@@ -30,22 +32,27 @@ class Product_image(models.Model):
     image = models.ImageField(upload_to="img", null=True,unique=True)
     
     def __str__(self):
-        return self.name
+        return self.name 
+    def get_absolute_url(self):
+        return reverse("product_detail", kwargs={"slug": self.slug})
     
 class subcategory(models.Model):
     category = models.ForeignKey(category, related_name="subcategory", on_delete= models.CASCADE, null=True)
     sub_category_name = models.CharField(max_length=30,null=True, unique=True, verbose_name="name")
     image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="sub_category_image", null=True)
     
+    
+    
     def __str__(self):
         return f"{self.sub_category_name} in {self.category} Category"
+       
     
 class Products(models.Model):
     STATUS_CHOICES = (
     ('draft', 'Draft'),
     ('published', 'Published'),
     )
-    category = models.ForeignKey(category, related_name="product_category",on_delete=models.CASCADE,null=True)
+    category = models.ForeignKey(subcategory, related_name="product_subcategory",on_delete=models.CASCADE,null=True)
     name = models.CharField(max_length=50, null =True)
     description = models.TextField(null =True)
     meta_keywords = models.CharField(max_length=255, null =True, help_text="seo keywords seprated with comma")
@@ -54,8 +61,8 @@ class Products(models.Model):
     published = models.DateTimeField(auto_now_add =True, null=True)
     updated = models.DateTimeField(auto_now=True,null=True)
     slug = models.SlugField(null=True, max_length=100,unique=True)
-    actualprice = models.CharField(max_length=20,null=True)
-    discountedprice = models.CharField(max_length=20,null=True)
+    actualprice = models.DecimalField(max_digits=5, decimal_places=2,null=True)
+    discountedprice = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     status = models.CharField(max_length=30, null =True,choices = STATUS_CHOICES,default="published")
     
     def __str__(self):
@@ -106,4 +113,36 @@ class featured_products(models.Model):
     def __str__(self):
         return self.name
     
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False) 
     
+
+    def __str__(self):
+        return f"Cart of {self.user.username}"
+    
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+    
+    def get_total_price(self):
+        return self.quantity * self.product.discountedprice
+
+class Order(models.Model):
+    product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
+    customer_email = models.EmailField(null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount to be paid
+    reference = models.CharField(max_length=200, unique=True)  # Unique Paystack reference
+    verified = models.BooleanField(default=False)  # Payment verification status
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.id} for {self.product.name}"
+    
+   
+   
