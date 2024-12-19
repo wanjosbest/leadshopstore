@@ -10,7 +10,7 @@ class User(AbstractUser):
     
     email = models.EmailField(null =True, unique=True, max_length=100)
     address=models.CharField(max_length=300,null=True,blank=True)
-
+    image = models.ImageField(upload_to="img", null=True,blank=True,default="user.jpg")
 
     class Meta:
         verbose_name="Users"
@@ -40,6 +40,7 @@ class subcategory(models.Model):
     category = models.ForeignKey(category, related_name="subcategory", on_delete= models.CASCADE, null=True)
     sub_category_name = models.CharField(max_length=30,null=True, unique=True, verbose_name="name")
     image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="sub_category_image", null=True)
+ 
     
     
     
@@ -56,7 +57,7 @@ class Products(models.Model):
     name = models.CharField(max_length=50, null =True)
     description = models.TextField(null =True)
     meta_keywords = models.CharField(max_length=255, null =True, help_text="seo keywords seprated with comma")
-    meta_descriptions = models.TextField(null =True, help_text="seo descriptions here ")
+    meta_descriptions = models.CharField(max_length=255, null =True, help_text="seo description here")
     product_image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="Product_image")
     published = models.DateTimeField(auto_now_add =True, null=True)
     updated = models.DateTimeField(auto_now=True,null=True)
@@ -64,6 +65,7 @@ class Products(models.Model):
     actualprice = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     discountedprice = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     status = models.CharField(max_length=30, null =True,choices = STATUS_CHOICES,default="published")
+    additionalinfo = models.TextField(null =True)
     
     def __str__(self):
         return f"{self.name} "
@@ -114,7 +116,7 @@ class featured_products(models.Model):
         return self.name
     
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False) 
     
@@ -125,7 +127,8 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1, null=True)
+    
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
@@ -144,5 +147,15 @@ class Order(models.Model):
     def __str__(self):
         return f"Order {self.id} for {self.product.name}"
     
-   
+#add review 
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    name =models.CharField(max_length=50,null=True)
+    product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
+    review = models.TextField(null=True)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+    email = models.EmailField(null=True)
+    def __str__ (self):
+        return f"{self.product} Review By {self.name}"
    

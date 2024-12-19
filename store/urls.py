@@ -22,13 +22,15 @@ urlpatterns =[
      path("contact", views.contact, name="contact-us"),
      path('cartlist/', views.cartlist, name='cartlist'),
      path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+     
      path('cart/', views.view_cart, name='view_cart'),
      path("category-list/", views.category_listView, name = "category_list"),
-     path("category-details/<int:id>/", views.category_detailView, name="category_detail"),
+     path("category-details/<str:id>/", views.category_detailView, name="category_detail"),
      path("subcategory-products/<int:id>/", views.products_by_subcategory, name="productsby_category"),
      path('cart/checkout/', views.initialize_payment, name='initialize_payment'),
      path('payment/verify/', views.verify_payment, name='verify_payment'),
      path('webhook/paystack/', views.paystack_webhook, name='paystack_webhook'),
+    
 
       
     

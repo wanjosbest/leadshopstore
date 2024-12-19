@@ -1,5 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
-from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart)
+from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
+                     Review)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -24,7 +25,8 @@ def index(request):
     getfeaturedproducts = featured_products.objects.all()
     
     #get recent products
-    getrecentproduct = Products.objects.all().order_by("-published")
+    # [:8] is the maximum number of recent products that will be displayed
+    getrecentproduct = Products.objects.all().order_by("-published")[:8]
     
     context = {
         "carouseldetail":getcouroseldetails, "specialoffer":getspecialoffers, "getcategory":getcategory,"featuredproducts":getfeaturedproducts,
@@ -113,7 +115,7 @@ def search(request):
        searched = Products.objects.filter(name__icontains = searched)
        return render(request, "header.html",{"searched":searched}) 
     else:
-      return render(request, "search.html") 
+      return render(request, "header.html") 
     
     
 # get posts by category
@@ -138,12 +140,26 @@ def product_detailView(request, slug):
     productdetails = Products.objects.get(slug = slug)
     
     getproductid = Products.objects.all()
+    getreview = Review.objects.filter(product =productdetails).order_by("-date_added")
+    get_numberofreviews = getreview.count()
     
+    #get user reviews
+    if request.method=="POST":
+       reviewuser = request.user
+       name = request.POST.get("name")
+       reviewuseremail = request.POST.get("email")
+       reviewedproduct = productdetails.id
+       review = request.POST.get("review")
+       savereview = Review.objects.create(user = reviewuser, email=reviewuseremail, review = review, product_id = reviewedproduct, name = name)
+       savereview.save()
+       return redirect(f"/product-details/{slug}/")
     context ={
-        "product_details": productdetails, "getproductid":getproductid
+        "product_details": productdetails, "getproductid":getproductid,"getreview":getreview,"get_numberofreviews":get_numberofreviews
         
     }
     return render(request, "products/product_detail.html",context)
+
+
 
 # Password reset request view
 class CustomPasswordResetView(PasswordResetView):
@@ -181,21 +197,44 @@ def contact(request):
 def get_user_cart(user):
     cart, created = Cart.objects.get_or_create(user=user)
     return cart
+#get quantity
+
 #adding products to cart
 
 @login_required
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Products, id=product_id)
-    cart = get_user_cart(request.user)
+    
+      if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        quantity = int(request.POST.get('quantity'))
 
-    # Check if the product is already in the cart
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        # If the product is already in the cart, increase the quantity
-        cart_item.quantity += 1
-        cart_item.save()
+        # Fetch the product from the database
+        try:
+            product = Products.objects.get(id=product_id)
+        except Products.DoesNotExist:
+            return HttpResponse("Product not found", status=404)
 
-    return redirect('view_cart')
+        # Get or create a cart for the user
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        # Check if the product already exists in the cart
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,quantity=quantity
+        )
+
+        if created:
+            # If the product is new in the cart, set the quantity and price
+            cart_item.quantity = quantity
+            cart_item.price_at_time_of_addition = product.discountedprice
+        else:
+            # If the product already exists in the cart, update the quantity
+            cart_item.quantity += quantity
+
+        cart_item.save()  # Save the cart item
+
+        return redirect('view_cart')  # Redirect to a view that shows the cart
+      return render (request, "products/product_detail.html")
 #view cart
 @login_required
 def view_cart(request):
@@ -238,8 +277,10 @@ def category_listView(request):
     return render(request, "products/category.html", context)
 def category_detailView(request, id):
     categorydetails = subcategory.objects.get(id =id )
+    #getproductposts by subcategory
+    getproductbycategory = Products.objects.filter(category = categorydetails)
     context ={
-        "category_details": categorydetails 
+        "category_details": categorydetails,"productsbycategory":getproductbycategory
     }
     return render(request, "products/category_detail.html",context)
 
@@ -366,3 +407,4 @@ def send_receipt_email(email, cart, total_amount):
         [email],
         fail_silently=False,
     )
+    

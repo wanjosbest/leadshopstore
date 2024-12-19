@@ -81,7 +81,24 @@
                 <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Store</span>
             </a>
         </div>
-       {%include "search.html"%}
+        <div class="col-lg-4 col-6 text-left">
+            <form action="{% url "search"%}" method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for products" name = "searched">
+                    <div class="input-group-append">
+                        <span class="input-group-text bg-transparent text-primary">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent text-primary">
+                                    <button type="submit">Search</button>
+                                </span>
+                            </div>
+                           
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="col-lg-4 col-6 text-right">
             <p class="m-0">Customer Service</p>
             <h5 class="m-0">+234-8033586158</h5>
@@ -92,7 +109,7 @@
 
 
 <!-- Navbar Start -->
-<div class="container-fluid bg-dark mb-30">
+<div class="container-fluid bg-dark mb-30 ">
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
             <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
@@ -109,15 +126,18 @@
                             <a href="" class="dropdown-item">Baby's Dresses</a>
                         </div>
                     </div>
-                    <a href="" class="nav-item nav-link">Shirts</a>
-                    <a href="" class="nav-item nav-link">Jeans</a>
-                    <a href="" class="nav-item nav-link">Swimwear</a>
-                    <a href="" class="nav-item nav-link">Sleepwear</a>
-                    <a href="" class="nav-item nav-link">Sportswear</a>
-                    <a href="" class="nav-item nav-link">Jumpsuits</a>
-                    <a href="" class="nav-item nav-link">Blazers</a>
-                    <a href="" class="nav-item nav-link">Jackets</a>
-                    <a href="" class="nav-item nav-link">Shoes</a>
+                    <a href="" class="nav-item nav-link">Academic</a>
+                    <a href="" class="nav-item nav-link">Automobile</a>
+                    <a href="" class="nav-item nav-link"></a>
+                    <a href="" class="nav-item nav-link">Bags</a>
+                    <a href="" class="nav-item nav-link">Bedding & Funitures</a>
+                    <a href="" class="nav-item nav-link">Children</a>
+                    <a href="" class="nav-item nav-link">Electronics</a>
+                    <a href="" class="nav-item nav-link">Estate</a>
+                    <a href="" class="nav-item nav-link">Miscellaneous</a>
+                    <a href="" class="nav-item nav-link">Masculine</a>
+                    <a href="" class="nav-item nav-link">Feminine</a>
+                    <a href="" class="nav-item nav-link">Jewelries</a>
                 </div>
             </nav>
         </div>
@@ -165,3 +185,43 @@
 </div>
 <!-- Navbar End -->
 
+
+   
+     <!--Displaying search results-->
+
+
+{% if searched %}
+<div class="container-fluid pt-5 pb-3">
+    <div class="row px-xl-5">
+    {% for result in searched %}
+     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+         <div class="product-item bg-light mb-4">
+             <div class="product-img position-relative overflow-hidden">
+                 <img class="img-fluid w-100" src="{{result.product_image.image.url}}" alt="{{result.name}}">
+                 <div class="product-action">
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                 </div>
+             </div>
+             <div class="text-center py-4">
+                 <a class="h6 text-decoration-none text-truncate" href="{% url "product_detail" result.slug%}">{{result.name}}</a>
+                 <div class="d-flex align-items-center justify-content-center mt-2">
+                     <h5>{{result.discountedprice}}</h5><h6 class="text-muted ml-2"><del>{{result.actualprice}}</del></h6>
+                 </div>
+                 <div class="d-flex align-items-center justify-content-center mb-1">
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small>(99)</small>
+                 </div>
+             </div>
+         </div>
+     </div>
+    {% endfor %}
+ </div>
+</div>
+{% endif %}

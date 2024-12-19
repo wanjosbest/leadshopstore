@@ -2,7 +2,22 @@
 
 {% block header %}
 {% include "header.html" %}
+<style>
 
+    .star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: gray;
+      }
+      .star:hover,
+      .star:hover ~ .star {
+        color: orange;
+      }
+      .star.selected {
+        color: gold;
+      }
+      
+</style>
 {% endblock %}
 
 {% block body %}
@@ -120,7 +135,8 @@
                             </div>
                         </form>
                     </div>
-                   
+                    <form action="{% url 'add_to_cart' product_details.id %}" method="POST">
+                        {% csrf_token%}
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
@@ -128,19 +144,22 @@
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="5"name="quantity">
+                            <input type="hidden" name="product_id" value="{{ product_details.id }}">
+                            <input type="text" class="form-control bg-secondary border-0 text-center" value="1" name="quantity">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
+                            
+                            
                         </div>
-                        <a href ="{% url 'add_to_cart' product_details.id %}"> <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <button class="btn btn-primary px-3"type="submit"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</button> 
-                        </a>
+                        
                            
                     </div>
-                    
+                </form>
                     <div class="d-flex pt-2">
                         <strong class="text-dark mr-2">Share on:</strong>
                         <div class="d-inline-flex">
@@ -167,7 +186,9 @@
                     <div class="nav nav-tabs mb-4">
                         <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
                         <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Information</a>
-                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews {{get_numberofreviews}}</a>
+                        
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
@@ -177,87 +198,57 @@
                         </div>
                         <div class="tab-pane fade" id="tab-pane-2">
                             <h4 class="mb-3">Additional Information</h4>
-                            <p>{{product_details.description}}</p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0">
-                                            Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                        </li>
-                                      </ul> 
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0">
-                                            Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                        </li>
-                                      </ul> 
-                                </div>
-                            </div>
+                            <p>{{product_details.additionalinfo}}</p>
                         </div>
+
                         <div class="tab-pane fade" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="mb-4">1 review for "Product Name"</h4>
+                                    {% for review in getreview %}
                                     <div class="media mb-4">
-                                        <img src="/media/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                        <img src="{{review.user.image.url}}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                                         <div class="media-body">
-                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                            <div class="text-primary mb-2">
+                                            <h6>{{review.name}}<small> - <i>{{review.date_added}}</i></small></h6>
+                                            <div class="text-primary mb-2 review">
                                                 <i class="fas fa-star"></i>
                                                 <i class="fas fa-star"></i>
                                                 <i class="fas fa-star"></i>
                                                 <i class="fas fa-star-half-alt"></i>
                                                 <i class="far fa-star"></i>
                                             </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                            <p>{{review.review}}</p>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
                                     <small>Your email address will not be published. Required fields are marked *</small>
                                     <div class="d-flex my-3">
-                                        <p class="mb-0 mr-2">Your Rating * :</p>
-                                        <div class="text-primary">
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
+                                        <div id="rating-container">
+                                            <span class="star" data-value="1">★</span>
+                                            <span class="star" data-value="2">★</span>
+                                            <span class="star" data-value="3">★</span>
+                                            <span class="star" data-value="4">★</span>
+                                            <span class="star" data-value="5">★</span>
+                                          </div>
+                                          <div id="rating-value"></div>
                                     </div>
-                                    <form>
+                                    <form action="" method ="POST">
+                                        {% csrf_token %}
                                         <div class="form-group">
                                             <label for="message">Your Review *</label>
-                                            <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                            <textarea id="message" cols="30" rows="5" class="form-control" name="review"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="name">Your Name *</label>
-                                            <input type="text" class="form-control" id="name">
+                                            <input type="text" class="form-control" id="name"name="name">
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Your Email *</label>
-                                            <input type="email" class="form-control" id="email">
+                                            <input type="email" class="form-control" id="email" name="email">
                                         </div>
+                                        
                                         <div class="form-group mb-0">
                                             <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
                                         </div>
@@ -277,7 +268,52 @@
   
 
 
-    
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stars = document.querySelectorAll('.star');
+        const ratingValue = document.getElementById('rating-value');
+      
+        stars.forEach(star => {
+          star.addEventListener('mouseover', () => {
+            resetStars();
+            highlightStars(star.dataset.value);
+          });
+      
+          star.addEventListener('click', () => {
+            resetStars();
+            highlightStars(star.dataset.value, true);
+            ratingValue.textContent = `Rating: ${star.dataset.value}`;
+          });
+      
+          star.addEventListener('mouseout', () => {
+            resetStars();
+            const selectedStars = document.querySelectorAll('.star.selected');
+            if (selectedStars.length > 0) {
+              highlightStars(selectedStars.length);
+            }
+          });
+        });
+      
+        function highlightStars(count, isSelected = false) {
+          stars.forEach((star, index) => {
+            if (index < count) {
+              star.style.color = 'gold';
+              if (isSelected) star.classList.add('selected');
+            }
+          });
+        }
+      
+        function resetStars() {
+          stars.forEach(star => {
+            star.style.color = 'gray';
+            star.classList.remove('selected');
+          });
+        }
+      });
+      
+
+</script>
+
 {% endblock%}
 {% block footer%}
 {% include "footer.html"%}
