@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review)
+                     Review,shippingdetails)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -91,7 +91,7 @@ def login_view(request):
             return redirect('/login/')
         else:
             login(request,user)
-            return redirect("/")
+            return redirect("view_cart")
     return render(request, 'user/login.html')
 # logout user
 
@@ -138,12 +138,29 @@ def product_listView(request):
 #product detail view
 def product_detailView(request, slug):
     productdetails = Products.objects.get(slug = slug)
-    
-    getproductid = Products.objects.all()
+    if request.method=="POST":
+       Quantity = request.POST.get("quantity")
+       product = request.POST.get("product")
+       cart = get_user_cart(request.user)
+
+    # Check if the product is already in the cart
+       cart_item, created = CartItem.objects.get_or_create(cart=cart,product_id=product,quantity=Quantity)
+       if not created:
+        # If the product is already in the cart, increase the quantity
+          cart_item.quantity += 1
+          cart_item.save()
+
+    context ={
+        "product_details": productdetails
+        
+    }
+    return render(request, "products/product_detail.html",context)
+
+def reviewView(request, slug):
+    productdetails = Products.objects.get(slug = slug)
     getreview = Review.objects.filter(product =productdetails).order_by("-date_added")
     get_numberofreviews = getreview.count()
-    
-    #get user reviews
+     #get user reviews
     if request.method=="POST":
        reviewuser = request.user
        name = request.POST.get("name")
@@ -153,13 +170,10 @@ def product_detailView(request, slug):
        savereview = Review.objects.create(user = reviewuser, email=reviewuseremail, review = review, product_id = reviewedproduct, name = name)
        savereview.save()
        return redirect(f"/product-details/{slug}/")
-    context ={
-        "product_details": productdetails, "getproductid":getproductid,"getreview":getreview,"get_numberofreviews":get_numberofreviews
-        
+    context = {
+        "getreview":getreview,"get_numberofreviews":get_numberofreviews
     }
-    return render(request, "products/product_detail.html",context)
-
-
+    return render(request, "products/product_detail.html", context)
 
 # Password reset request view
 class CustomPasswordResetView(PasswordResetView):
@@ -197,51 +211,16 @@ def contact(request):
 def get_user_cart(user):
     cart, created = Cart.objects.get_or_create(user=user)
     return cart
-#get quantity
 
-#adding products to cart
 
-@login_required
-def add_to_cart(request, product_id):
-    
-      if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        quantity = int(request.POST.get('quantity'))
 
-        # Fetch the product from the database
-        try:
-            product = Products.objects.get(id=product_id)
-        except Products.DoesNotExist:
-            return HttpResponse("Product not found", status=404)
-
-        # Get or create a cart for the user
-        cart, created = Cart.objects.get_or_create(user=request.user)
-
-        # Check if the product already exists in the cart
-        cart_item, created = CartItem.objects.get_or_create(
-            cart=cart,
-            product=product,quantity=quantity
-        )
-
-        if created:
-            # If the product is new in the cart, set the quantity and price
-            cart_item.quantity = quantity
-            cart_item.price_at_time_of_addition = product.discountedprice
-        else:
-            # If the product already exists in the cart, update the quantity
-            cart_item.quantity += quantity
-
-        cart_item.save()  # Save the cart item
-
-        return redirect('view_cart')  # Redirect to a view that shows the cart
-      return render (request, "products/product_detail.html")
 #view cart
 @login_required
 def view_cart(request):
     cart = get_user_cart(request.user)
     cart_items = cart.items.all()
     total_price = sum(item.get_total_price() for item in cart_items)
-
+   
     return render(request, 'products/view_cart.html', {
         'cart_items': cart_items,
         'total_price': total_price,
@@ -254,6 +233,11 @@ def cartlist(request):
         "allcartitems":allcartitems
     }
     return render(request, "products/cart_list.html", context)
+#delete cart
+def remove_from_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart_item.delete()
+    return redirect('view_cart')
 #cart details
 
 def cart(request, id):
@@ -285,9 +269,12 @@ def category_detailView(request, id):
     return render(request, "products/category_detail.html",context)
 
 def header(request):
-    allcartitems = CartItem.objects.all()
+    allcartitems = CartItem.objects.filter(user=request.user)
+    
+    getcount = allcartitems.count()
+    print(getcount)
     context ={
-        "allcartitems":allcartitems
+        "getcount":getcount
     }
     return render(request, "header.html",context)
 
@@ -408,3 +395,16 @@ def send_receipt_email(email, cart, total_amount):
         fail_silently=False,
     )
     
+def checkoutform(request):
+    if request.method=="POST":
+        fullname = request.POST.get("fullname")
+        email = request.POST.get("email")
+        address = request.POST.get("address")
+        state = request.POST.get("state")
+        city = request.POST.get("city")
+        cart = get_user_cart(request.user)
+        user = request.user
+        savedetails = shippingdetails.objects.create(fullname=fullname,email=email,address=address,state=state,cart=cart,user=user,city=city)
+        savedetails.save()
+        return redirect("initialize_payment")
+    return render(request, "checkoutform.html")

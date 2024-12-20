@@ -35,13 +35,20 @@
         <div class="col-lg-6 text-center text-lg-right">
             <div class="d-inline-flex align-items-center">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                    {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">HI  {{user.username}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        {% if user.is_authenticated %}
-                         {{user.username}}
+                       
+                        <br>
+                         <button><a href="{% url 'logout' %}">Logout</a></button>
                         {% else %}
-                       <a href="{% url "login"%}"> <button class="dropdown-item" type="button">Sign in</button></a>
-                       <a href="{% url "register"%}">  <button class="dropdown-item" type="button">Sign up</button></a>
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                       
+                        <br>
+                        
+                        <a href="{% url "login"%}"> <button class="dropdown-item" type="button">Sign in</button></a>
+                        <a href="{% url "register"%}">  <button class="dropdown-item" type="button">Sign up</button></a>
                        {% endif %}
                     </div>
                 </div>
@@ -67,7 +74,7 @@
                     <i class="fas fa-heart text-dark"></i>
                     <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                 </a>
-                <a href="" class="btn px-0 ml-2">
+                <a href="{% url 'view_cart'%}" class="btn px-0 ml-2">
                     <i class="fas fa-shopping-cart text-dark"></i>
                     <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                 </a>
@@ -165,19 +172,22 @@
                         </div>
                         <a href="{% url "contact-us"%}" class="nav-item nav-link">Contact</a>
                     </div>
-
+                    {% if user.is_authenticated%}
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a href="" class="btn px-0">
                             <i class="fas fa-heart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                         </a>
-                        {% for products in allcartitems %}
-                        <a href="{% url "cart" products.id%}" class="btn px-0 ml-3">
+                      
+                        <a href="{% url 'view_cart'%}" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{getcount}}</span>
                         </a>
-                        {% endfor%}
+                        
                     </div>
+                    {% else %}
+                    <h5 style="color:white;"> <a href="{% url 'login' %}">Login</a> to view carts </h5>
+                    {% endif %}
                 </div>
             </nav>
         </div>

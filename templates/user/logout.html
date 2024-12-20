@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+<form action = "{% url "logout" %}" method="POST">
+    {{csrf_token }}
+<h2> Are you sure you want to Logout?</h2>
+<button type = "submit">Logout</button>
+{% endblock %}
+
+{% block body %}
+{% include "footer.html" %}
+{% endblock %}

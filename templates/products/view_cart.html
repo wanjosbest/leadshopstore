@@ -1,11 +1,68 @@
-<h1>Your Cart</h1>
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+
+<h1>Your Cart Summary </h1>
+
+
+<div class="container-fluid pt-5 pb-3">
+    <div class="row px-xl-5">
+        {% for item in cart_items %}
+     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+         <div class="product-item bg-light mb-4">
+             <div class="product-img position-relative overflow-hidden">
+                 <img class="img-fluid w-100" src="{{item.product.product_image.image.url}}" alt="{{product.name}}">
+                 <div class="product-action">
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                 </div>
+             </div>
+             <div class="text-center py-4">
+                 <a class="h6 text-decoration-none text-truncate" href="">{{ item.product.name }}</a>
+                 <div class="d-flex align-items-center justify-content-center mt-2">
+                     <h5>${{ item.product.discountedprice }}</h5><h6 class="text-muted ml-2"><del>{{item.product.actualprice}}</del></h6>
+                 </div>
+                 <div class="d-flex align-items-center justify-content-center mb-1">
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small class="fa fa-star text-primary mr-1"></small>
+                     <small>(99)</small>
+                     <button><a href="{% url 'remove_cart' item.id %}">Delete item</a></button>
+                 </div>
+             </div>
+         </div>
+     </div>
+    {% endfor %}
+ </div>
+</div>
+<br>
 <ul>
     {% for item in cart_items %}
         <li>
-            {{ item.product.name }} - ${{ item.product.price }} x {{ item.quantity }} = ${{ item.get_total_price }}
+            {{ item.product.name }} - N{{ item.product.discountedprice }} x {{ item.quantity }} = N{{ item.get_total_price }}
         </li>
+    
     {% endfor %}
 </ul>
-<p>Total: ${{ total_price }}</p>
-<a href="{% url 'initialize_payment' %}">Proceed to Checkout</a>
-<a href="/">Continue Shopping</a>
+<h2>Total: N{{ total_price }}</h2>
+
+
+<button><a href="{% url 'checkout' %}">Proceed to Checkout</a></button>
+<button><a href="/">Continue Shopping</a></button>
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}

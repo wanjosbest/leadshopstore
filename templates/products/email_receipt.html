@@ -7,7 +7,7 @@
 <ul>
     {% for item in cart.items.all %}
         <li>
-            {{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }} = ${{ item.get_total_price }}
+            {{ item.product.name }} - {{ item.quantity }} x ${{ item.product.discountedprice }} = ${{ item.get_total_price }}
         </li>
     {% endfor %}
 </ul>

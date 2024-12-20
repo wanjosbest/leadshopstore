@@ -53,6 +53,7 @@ class Products(models.Model):
     ('draft', 'Draft'),
     ('published', 'Published'),
     )
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
     category = models.ForeignKey(subcategory, related_name="product_subcategory",on_delete=models.CASCADE,null=True)
     name = models.CharField(max_length=50, null =True)
     description = models.TextField(null =True)
@@ -125,9 +126,11 @@ class Cart(models.Model):
         return f"Cart of {self.user.username}"
     
 class CartItem(models.Model):
+    
     cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, null=True)
+    published = models.DateTimeField(auto_now_add =True, null=True)
     
     
     def __str__(self):
@@ -159,3 +162,14 @@ class Review(models.Model):
     def __str__ (self):
         return f"{self.product} Review By {self.name}"
    
+class shippingdetails(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='shipitems')
+    fullname = models.CharField(max_length=255, null=True)
+    address = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
+    state = models.CharField(max_length=255, null=True)
+    email = models.EmailField(max_length=100,null=True,)
+    def __str__(self):
+        return f"{self.fullname} request shipping to {self.state}"
+        
