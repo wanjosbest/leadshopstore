@@ -44,7 +44,7 @@ def register_view(request):
         password = request.POST.get('password')
         email = request.POST.get('email')
         address = request.POST.get('address')
-        
+        image = request.FILES.get("image")
         # Check if a user with the provided username already exists
         user = User.objects.filter(username=username)
         
@@ -59,7 +59,8 @@ def register_view(request):
             last_name=lastname,
             username=username,
             email = email,
-            address = address
+            address = address,
+            image = image
         )
         #encript password
         user.set_password(password)
