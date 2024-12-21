@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+        }
+        .profile-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .profile-header h2 {
+            margin: 0;
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .section h3 {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 5px 0;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            display: inline-block;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <img src="{{user.image.url}}" alt="Profile Picture">
+            <div>
+                <h2>{{user.first_name}} {{user.last_name}}</h2>
+                <p>@{{user.username}}</p>
+            </div>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="section">
+            <h3>Profile Information</h3>
+            <ul>
+                <li>FirstName: {{user.first_name}}</li>
+                <li>LastName: {{user.last_name}}</li>
+                <li>Adress: {{user.address}}</li>
+                <li>Email: {{user.email}}</li>
+                <li>Phone: +1 234-567-8901</li>
+            </ul>
+        </div>
+
+        <!-- Address Info -->
+        <div class="section">
+            <h3>Address</h3>
+            <ul>
+                <li>{{user.address}}</li>
+                <li>Billing: Same as shipping</li>
+            </ul>
+        </div>
+
+        <!-- Order History -->
+        <div class="section">
+            <h3>Order History</h3>
+            <ul>
+                <li>Order #12345 - $45.99 - Delivered</li>
+                <li>Order #12346 - $89.50 - Shipped</li>
+                <li>Order #12347 - $12.99 - Cancelled</li>
+            </ul>
+        </div>
+
+        <!-- Wishlist -->
+        <div class="section">
+            <h3>Wishlist</h3>
+            <ul>
+                <li>Wireless Headphones</li>
+                <li>Leather Wallet</li>
+                <li>Smartwatch</li>
+            </ul>
+        </div>
+
+        <!-- Settings -->
+        <div class="section">
+            <h3>Settings</h3>
+            <ul>
+                <li><a href="#" class="button">Update Profile</a></li>
+                <li><a href="{% url 'changepassword' %}" class="button">Change Password</a></li>
+                <button onclick="myFunction()"><li><a href="{% url 'delete-account' getuser.id %}" class="button" style="background-color: #f44336;">Delete Account</a></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        function myFunction() {
+          alert("Hey are sure you want to delete your account?");
+        }
+        </script>
+</body>
+</html>

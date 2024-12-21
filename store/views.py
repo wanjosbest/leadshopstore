@@ -408,3 +408,19 @@ def checkoutform(request):
         savedetails.save()
         return redirect("initialize_payment")
     return render(request, "checkoutform.html")
+
+def user_profile(request):
+    getuser = request.user
+    
+    context = {"getuser":getuser}
+    return render (request, "user/profile.html",context)
+
+def userdeleteacc(request,user_id):
+    getuser = User.objects.get(id = user_id)
+    deleteacc = getuser.delete()
+    context ={
+        "getuser":getuser
+    }
+    return HttpResponse("Hey Account Deleted Successfully!")
+   
+    
