@@ -42,8 +42,6 @@ class subcategory(models.Model):
     image = models.ForeignKey(Product_image, on_delete=models.CASCADE, related_name="sub_category_image", null=True)
  
     
-    
-    
     def __str__(self):
         return f"{self.sub_category_name} in {self.category} Category"
        
@@ -72,6 +70,14 @@ class Products(models.Model):
         return f"{self.name} "
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"slug": self.slug})
+class productfeatures(models.Model):
+    product = models.ForeignKey(Products,related_name="productinfo",on_delete=models.CASCADE, null=True)
+    feature = models.CharField(max_length=255, null=True)
+    published = models.DateTimeField(auto_now_add =True, null=True)
+    updated = models.DateTimeField(auto_now=True,null=True)
+    
+    def __str__(self):
+        return f"{self.feature} of {self.product}"
     
 class carousel (models.Model):
     carousel_title = models.CharField(max_length=255,null=True)
