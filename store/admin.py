@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (User, category, Products, subcategory,carousel,special_offer,featured_products, Product_image,
-                     CartItem, Order, Cart,Review,shippingdetails,productfeatures
+                     CartItem, Order, Cart,Review,shippingdetails,productfeatures, OrderHistory
                      )
 
 admin.site.register(User)
@@ -12,6 +12,7 @@ admin.site.register(Cart)
 admin.site.register(Review)
 admin.site.register(shippingdetails)
 admin.site.register(productfeatures)
+admin.site.register(OrderHistory)
 
 class subcategoryAdmin(admin.ModelAdmin):  # Use the regular ModelAdmin
   search_fields=['sub_category_name']

@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,shippingdetails)
+                     Review,shippingdetails, OrderHistory)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -358,7 +358,9 @@ def verify_payment(request):
 
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
-
+            total_price = sum(item.get_total_price() for item in cart_items)
+            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price)
+            savedetails.save()
             return render(request, 'products/payment_success.html', {'cart': cart})
 
     return render(request, 'products/payment_error.html', {'message': 'Payment verification failed.'})
@@ -424,4 +426,8 @@ def userdeleteacc(request,user_id):
     }
     return HttpResponse("Hey Account Deleted Successfully!")
    
+@login_required
+def order_history_view(request):
+    orders = OrderHistory.objects.filter(user=request.user)
+    return render(request, 'user/order_history.html', {'orders': orders})
     

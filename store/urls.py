@@ -34,8 +34,7 @@ urlpatterns =[
      path('cart/checkout/', views.initialize_payment, name='initialize_payment'),
      path('payment/verify/', views.verify_payment, name='verify_payment'),
      path('webhook/paystack/', views.paystack_webhook, name='paystack_webhook'),
-    
-
+     path('order-history/', views.order_history_view, name='order_history'),
       
     
 ]
