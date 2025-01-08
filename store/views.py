@@ -7,8 +7,9 @@ from django.views.generic import ListView,DetailView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.urls import reverse_lazy
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
 import uuid
 import requests
 from django.conf import settings
@@ -18,6 +19,14 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes,force_str
+from .forms import PasswordResetRequestForm, CustomSetPasswordForm
+from django.contrib.sites.shortcuts import get_current_site
+
+
+
 def index(request):
     getcouroseldetails = carousel.objects.all()
     getspecialoffers = special_offer.objects.all()
@@ -177,24 +186,54 @@ def reviewView(request, slug):
     return render(request, "products/product_detail.html", context)
 
 # Password reset request view
-class CustomPasswordResetView(PasswordResetView):
-    template_name = 'user/password_reset.html'
-    email_template_name = 'user/password_reset_email.html'
-    subject_template_name = 'user/password_reset_subject.txt'
-    success_url = reverse_lazy('password_reset_done')
+def password_reset_request(request):
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            users = User.objects.filter(email=email)
+            if users.exists():
+                for user in users:
+                    subject = "Password Reset Requested"
+                    uid = urlsafe_base64_encode(force_bytes(user.pk))
+                    token = default_token_generator.make_token(user)
+                    domain = get_current_site(request).domain
+                    reset_link = reverse("password_reset_confirm", kwargs={"uidb64": uid, "token": token})
+                    reset_url = f'https://{domain}{reset_link}'
+                    message = f"Click the link below to reset your password: {reset_url}"
+                    send_mail(subject, message, 'josephwandiyahyel3@gmail.com', [email])
+            return redirect("password_reset_done")
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, "user/password_reset_request.html", {"form": form})
 
-# Password reset done view
-class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'user/password_reset_done.html'
 
-# Password reset confirm view
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'user/password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
-# Password reset complete view
-class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = 'user/password_reset_complete.html'
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_object_or_404(get_user_model(), pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        if request.method == "POST":
+            form = CustomSetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect("password_reset_complete")
+        else:
+            form = CustomSetPasswordForm(user)
+        return render(request, "user/password_reset_confirm.html", {"form": form})
+    else:
+        return render(request, "user/password_reset_invalid.html")
     
+def password_reset_complete(request):
+    return render(request, "user/password_reset_complete.html") 
+
+def password_reset_done(request):
+    return render(request, "user/password_reset_done.html")  
+
+
 # shop
 
 def shop(request):
@@ -358,7 +397,7 @@ def verify_payment(request):
 
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
-            total_price = sum(item.get_total_price() for item in cart_items)
+            total_price = initialize_payment().total_price
             savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price)
             savedetails.save()
             return render(request, 'products/payment_success.html', {'cart': cart})
