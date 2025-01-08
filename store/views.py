@@ -202,7 +202,9 @@ def password_reset_request(request):
                     reset_url = f'https://{domain}{reset_link}'
                     message = f"Click the link below to reset your password: {reset_url}"
                     send_mail(subject, message, 'josephwandiyahyel3@gmail.com', [email])
-            return redirect("password_reset_done")
+                return redirect("password_reset_done")
+            else:
+                return HttpResponse("Please you are not our User")
     else:
         form = PasswordResetRequestForm()
     return render(request, "user/password_reset_request.html", {"form": form})
