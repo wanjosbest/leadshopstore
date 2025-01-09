@@ -1,5 +1,20 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+
 {% if user.is_authenticated%}
-<h2>{{user.username}} are you sure you want to delete your account?</h2>
-<a href ="{% url 'delete-account'getuser.id %}"></a>
-<button>DELETE</button>
+<h2>{{user.username}} </h2> <p>are you sure you want to delete your account?</p>
+<button><a href ="{% url 'delete-account'  %}">DELETE</a></button>
+
 {% endif %}
+
+{% endblock %}
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}

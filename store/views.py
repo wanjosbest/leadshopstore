@@ -462,11 +462,10 @@ def user_profile(request):
 def userdeleteacc(request,user_id):
     getuser = User.objects.get(id = user_id)
     deleteacc = getuser.delete()
-    context ={
-        "getuser":getuser
-    }
-    return HttpResponse("Hey Account Deleted Successfully!")
-   
+    return render (request, "user/deleteacc.html")
+def deleteac(request):
+    
+    return render (request, "user/deleteacc.html")  
 @login_required
 def order_history_view(request):
     orders = OrderHistory.objects.filter(user=request.user)
