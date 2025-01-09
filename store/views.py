@@ -1,13 +1,12 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,shippingdetails, OrderHistory)
+                     Review,ShippingDetails, OrderHistory)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 import uuid
@@ -22,8 +21,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes,force_str
-from .forms import PasswordResetRequestForm, CustomSetPasswordForm
+from .forms import PasswordResetRequestForm, CustomSetPasswordForm,PasswordChangeForm,ShippingDetailsForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth import update_session_auth_hash
 
 
 
@@ -110,10 +110,24 @@ def logout_view(request):
     return redirect('/login/')
 
 #fogort password
-class ChangePasswordView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    success_url = reverse_lazy('index')
-    template_name = 'user/change_password.html'
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)  # Keeps the user logged in
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('password_change_done')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    
+    return render(request, 'user/change_password.html', {'form': form})
+
+def password_change_done(request):
+    return render(request, 'user/change_password_done.html')
    
 
 
@@ -399,7 +413,7 @@ def verify_payment(request):
 
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
-            total_price = initialize_payment().total_price
+            total_price = initialize_payment(request).total_price
             savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price)
             savedetails.save()
             return render(request, 'products/payment_success.html', {'cart': cart})
@@ -439,33 +453,39 @@ def send_receipt_email(email, cart, total_amount):
         fail_silently=False,
     )
     
-def checkoutform(request):
-    if request.method=="POST":
-        fullname = request.POST.get("fullname")
-        email = request.POST.get("email")
-        address = request.POST.get("address")
-        state = request.POST.get("state")
-        city = request.POST.get("city")
-        cart = get_user_cart(request.user)
-        user = request.user
-        savedetails = shippingdetails.objects.create(fullname=fullname,email=email,address=address,state=state,cart=cart,user=user,city=city)
-        savedetails.save()
-        return redirect("initialize_payment")
-    return render(request, "checkoutform.html")
+@login_required
+def shipping_details(request):
+    try:
+        # Try to get existing shipping details if any
+        shipping = ShippingDetails.objects.get(user=request.user)
+    except ShippingDetails.DoesNotExist:
+        shipping = None
+
+    if request.method == 'POST':
+        form = ShippingDetailsForm(request.POST, instance=shipping)
+        if form.is_valid():
+            form.save()  # Save the shipping details
+            return redirect('checkout')  # Redirect to the checkout page
+    else:
+        form = ShippingDetailsForm(instance=shipping)
+
+    return render(request, 'shipping_details.html', {'form': form})
 
 def user_profile(request):
     getuser = request.user
-    
     context = {"getuser":getuser}
     return render (request, "user/profile.html",context)
 
-def userdeleteacc(request,user_id):
-    getuser = User.objects.get(id = user_id)
-    deleteacc = getuser.delete()
-    return render (request, "user/deleteacc.html")
-def deleteac(request):
-    
-    return render (request, "user/deleteacc.html")  
+def delete_user_view(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        user.delete()
+        return HttpResponse(f"User with ID {user_id} has been deleted.")
+    except User.DoesNotExist:
+        return HttpResponse(f"User with ID {user_id} does not exist.", status=404)
+
+def deleteacc(request):
+    return render(request, "user/deleteacc.html")
 @login_required
 def order_history_view(request):
     orders = OrderHistory.objects.filter(user=request.user)

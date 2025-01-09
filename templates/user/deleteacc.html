@@ -8,8 +8,15 @@
 {% block body %}
 
 {% if user.is_authenticated%}
-<h2>{{user.username}} </h2> <p>are you sure you want to delete your account?</p>
-<button><a href ="{% url 'delete-account'  %}">DELETE</a></button>
+<h1>Delete User</h1>
+<p>Are you sure you want to delete your account?</p>
+
+<form action="{% url 'delete_user' user.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Delete Account</button>
+</form>
+
+<a href="{% url 'index' %}">Cancel</a>
 
 {% endif %}
 

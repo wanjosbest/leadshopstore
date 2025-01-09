@@ -1,11 +1,20 @@
 from django import forms
 from django.contrib.auth.forms import SetPasswordForm
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import PasswordChangeForm
+from .models import User,ShippingDetails
 
-class ChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput())
-    new_password = forms.CharField(widget=forms.PasswordInput())
-    confirm_password = forms.CharField(widget=forms.PasswordInput())
+class ShippingDetailsForm(forms.ModelForm):
+    class Meta:
+        model = ShippingDetails
+        fields = [
+            'recipient_name', 'address_line_1', 'address_line_2',
+            'city', 'state', 'postal_code', 'country', 'phone_number', 'email'
+        ]
+class CustomPasswordChangeForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
     
 
 

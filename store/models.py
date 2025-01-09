@@ -168,16 +168,20 @@ class Review(models.Model):
     def __str__ (self):
         return f"{self.product} Review By {self.name}"
    
-class shippingdetails(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
-    cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='shipitems')
-    fullname = models.CharField(max_length=255, null=True)
-    address = models.CharField(max_length=255, null=True)
-    city = models.CharField(max_length=255, null=True)
-    state = models.CharField(max_length=255, null=True)
-    email = models.EmailField(max_length=100,null=True,)
+class ShippingDetails(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)  # link to user
+    recipient_name = models.CharField(max_length=255,null=True)
+    address_line_1 = models.CharField(max_length=255,null=True)
+    address_line_2 = models.CharField(max_length=255, blank=True,null=True)
+    city = models.CharField(max_length=100,null=True)
+    state = models.CharField(max_length=100,null=True)
+    postal_code = models.CharField(max_length=20,null=True)
+    country = models.CharField(max_length=100,null=True)
+    phone_number = models.CharField(max_length=20,null=True)
+    email = models.EmailField(null=True)
+
     def __str__(self):
-        return f"{self.fullname} request shipping to {self.state}"
+        return f"{self.recipient_name} - {self.city}, {self.country}"
 class OrderHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(auto_now_add=True)
