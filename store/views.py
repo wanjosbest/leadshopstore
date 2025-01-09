@@ -465,7 +465,7 @@ def shipping_details(request):
         form = ShippingDetailsForm(request.POST, instance=shipping)
         if form.is_valid():
             form.save()  # Save the shipping details
-            return redirect('checkout')  # Redirect to the checkout page
+            return redirect("initialize_payment")  # Redirect to the checkout page
     else:
         form = ShippingDetailsForm(instance=shipping)
 
