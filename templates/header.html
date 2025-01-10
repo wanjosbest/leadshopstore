@@ -195,9 +195,6 @@
     </div>
 </div>
 <!-- Navbar End -->
-
-
-   
      <!--Displaying search results-->
 
 
@@ -205,6 +202,7 @@
 <div class="container-fluid pt-5 pb-3">
     <div class="row px-xl-5">
     {% for result in searched %}
+    
      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
          <div class="product-item bg-light mb-4">
              <div class="product-img position-relative overflow-hidden">
@@ -232,7 +230,10 @@
              </div>
          </div>
      </div>
+    
+    
     {% endfor %}
  </div>
 </div>
+
 {% endif %}

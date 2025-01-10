@@ -129,6 +129,9 @@
         margin-top: 10px;
     }
     
+    a{
+        text-decoration:none;
+    }
   </style>
 </head>
 <body>
@@ -152,7 +155,7 @@
                 <div id="personal-info" class="section">
                     <h2>Personal Information</h2>
                     <div class="profile-header">
-                        <img src="{{user.image.url}}" alt="{{user.username}} profile image" class="profile-picture">
+                        {% comment %} <img src="{{user.image.url}}" alt="{{user.username}} profile image" class="profile-picture"> {% endcomment %}
                         <div class="profile-details">
                             <p><strong>Name:</strong> {{user.first_name}} {{ user.last_name}}</p>
                             <p><strong>Email:</strong> {{user.email}}</p>
@@ -182,6 +185,15 @@
                     <p> <strong> Delete Account: </strong><button><a href="{% url "delete-account" %}" class="button" >Delete Account</a></button></p>
                     
         
+                </div>
+                <div id="address-book" class="section">
+                    <h2>Add Products</h2>
+                    <p><strong>Add Product:</strong><button><a href="{% url 'addproducts' %}" class="button">Add Products</a></button></p><br><br>    
+                </div>
+
+                <div id="address-book" class="section">
+                    <h2>View all your Products</h2>
+                    <p><strong>View Product:</strong><button><a href="{% url 'userproductlist' %}" class="button">View Products</a></button></p><br><br>    
                 </div>
             </section>
         </div>

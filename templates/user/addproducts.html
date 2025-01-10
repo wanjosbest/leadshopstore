@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+   <!-- Display error/success messages -->
+   {% if messages %}
+   <div class="alert alert-primary" role="alert">
+       {% for message in messages %}
+       {{ message }}
+       {% endfor %}
+   </div>
+   {% endif %}
+<form action="" method="post" class="container">
+<h1> Add Products</h1>
+
+    {% csrf_token %}
+
+  {{form.as_p}}
+   <input type="submit" value ="Add Product">
+</form>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}

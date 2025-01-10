@@ -6,11 +6,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Shipping Details</h1>
-    <form method="POST">
+    
+    <form method="POST" class="container">
+        <h1>Shipping Details</h1>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Shipping Details</button>
+        <button type="submit">Complete The Order</button>
     </form>
 {% endblock %}
 {% block footer %}

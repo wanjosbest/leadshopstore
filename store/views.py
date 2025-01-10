@@ -21,7 +21,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes,force_str
-from .forms import PasswordResetRequestForm, CustomSetPasswordForm,PasswordChangeForm,ShippingDetailsForm
+from .forms import PasswordResetRequestForm, CustomSetPasswordForm,PasswordChangeForm,ShippingDetailsForm,ProductForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import update_session_auth_hash
 
@@ -491,3 +491,21 @@ def order_history_view(request):
     orders = OrderHistory.objects.filter(user=request.user)
     return render(request, 'user/order_history.html', {'orders': orders})
     
+    
+# user to add products
+
+def addproducts(request):
+    form = ProductForm(request.POST)
+    if request.method =="POST":
+       if form.is_valid():
+          form.save()
+       messages.info(request,"product added Successfully!")
+    return render(request, "user/addproducts.html",{"form":form})
+
+# view product lists by user
+def userproductlist(request):
+    user = request.user
+    getproduct = Products.objects.filter(user = user)
+    
+    context = {"getproduct":getproduct}
+    return render(request, "user/userproductlist.html", context)
