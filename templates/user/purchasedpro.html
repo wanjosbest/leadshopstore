@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+{% for productstatus in get_purchasedproductdetails %}
+<li> Username: <b>{{productstatus.user}}</b>
+<li> User Full Name:<b>{{productstatus.user.first_name}}{{productstatus.user.last_name}}</li></b>
+<li> Product Purchased:<b>{{productstatus.product}}</li></b>
+<li> Product Price: <b>{{productstatus.product.discountedprice}}</li></b>
+<li> Product Status: <b>{{productstatus.status}}</li></b>
+<hr>
+
+{% endfor %}
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}

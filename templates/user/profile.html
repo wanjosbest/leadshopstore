@@ -135,6 +135,7 @@
   </style>
 </head>
 <body>
+    {% for user in getuser %}
     <div class="profile-container">
         <header>
             <h1>User Profile</h1>
@@ -167,7 +168,7 @@
                 <!-- Order History Section -->
                 <div id="order-history" class="section">
                     <h2>Order History</h2>
-                    <button> <a href="{% url 'order_history' %}">View Order History</a></button>
+                    <button> <a href="{% url 'order_history' user.username %}">View Order History</a></button>
                    
                 </div>
 
@@ -186,23 +187,10 @@
                     
         
                 </div>
-                <div id="address-book" class="section">
-                    <h2>Add Products</h2>
-                    <p><strong>Add Product:</strong><button><a href="{% url 'addproducts' %}" class="button">Add Products</a></button></p><br><br>    
-                </div>
-
-                <div id="address-book" class="section">
-                    <h2>View all your Products</h2>
-                    <p><strong>View Product:</strong><button><a href="{% url 'userproductlist' %}" class="button">View Products</a></button></p><br><br>    
-                </div>
+                
             </section>
         </div>
     </div>
-
-    <script>
-        function myFunction() {
-          alert("Hey are sure you want to delete your account?");
-        }
-        </script>
+{% endfor%}
 </body>
 </html>

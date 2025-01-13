@@ -9,12 +9,13 @@
     <ul>
         {% for order in orders %}
             <li>
-                Order #{{ order.id }} - Status: {{ order.status }} - Total: ${{ order.total_amount }} - Date: {{ order.order_date }}
+                Order #{{ order.id }} - Product: {{ order.product }} - Status: {{ order.status }} - Total: ${{ order.total_amount }} - Email: {{ order.customer_email }} 
+             
             </li>
         {% empty %}
             <li>No orders found.</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'user_profile' %}">Back to Profile</a>
+  
 </body>
 </html>

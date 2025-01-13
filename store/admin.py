@@ -14,6 +14,7 @@ admin.site.register(ShippingDetails)
 admin.site.register(productfeatures)
 admin.site.register(OrderHistory)
 
+
 class subcategoryAdmin(admin.ModelAdmin):  # Use the regular ModelAdmin
   search_fields=['sub_category_name']
   prepopulated_fields = {'slug': ('sub_category_name',)}

@@ -375,14 +375,14 @@ def initialize_payment(request):
         'callback_url': request.build_absolute_uri('/payment/verify/'),  # Redirect here after payment
     }
 
-    url = 'https://api.paystack.co/transaction/initialize'
+    url = 'https://api.paystack.co/transaction/initialize/'
     response = requests.post(url, headers=headers, json=data)
 
     if response.status_code == 200:
         payment_url = response.json()['data']['authorization_url']
-        return redirect(payment_url)
+        #return redirect(payment_url)
     else:
-        return render(request, 'products/payment_error.html', {'message': 'Payment initialization failed.'})
+        return render(request, 'products/payment_error.html', {'message': 'Payment Failed Please Check your Network.'})
 
 #verify payments
 
@@ -414,7 +414,7 @@ def verify_payment(request):
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
             total_price = initialize_payment(request).total_price
-            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price)
+            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email)
             savedetails.save()
             return render(request, 'products/payment_success.html', {'cart': cart})
 
@@ -471,8 +471,8 @@ def shipping_details(request):
 
     return render(request, 'shipping_details.html', {'form': form})
 
-def user_profile(request):
-    getuser = request.user
+def user_profile(request,username):
+    getuser = User.objects.filter(username = username)
     context = {"getuser":getuser}
     return render (request, "user/profile.html",context)
 
@@ -487,8 +487,11 @@ def delete_user_view(request, user_id):
 def deleteacc(request):
     return render(request, "user/deleteacc.html")
 @login_required
-def order_history_view(request):
-    orders = OrderHistory.objects.filter(user=request.user)
+def order_history_view(request, username):
+    
+    getuser = User.objects.get(username = username)
+    orders = OrderHistory.objects.filter(user=getuser)
+    
     return render(request, 'user/order_history.html', {'orders': orders})
     
     
@@ -509,3 +512,10 @@ def userproductlist(request):
     
     context = {"getproduct":getproduct}
     return render(request, "user/userproductlist.html", context)
+
+def getalluser(request):
+    getusers = User.objects.all()
+    context = {"getusers":getusers}
+    print(getusers)
+    return render(request, "allusers.html",context)
+
