@@ -24,7 +24,7 @@ from django.utils.encoding import force_bytes,force_str
 from .forms import PasswordResetRequestForm, CustomSetPasswordForm,PasswordChangeForm,ShippingDetailsForm,ProductForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import update_session_auth_hash
-
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -104,13 +104,13 @@ def login_view(request):
             return redirect("view_cart")
     return render(request, 'user/login.html')
 # logout user
-
+@login_required(login_url='/login/')
 def logout_view(request):
     logout(request)
     return redirect('/login/')
 
 #fogort password
-@login_required
+@login_required(login_url= '/login/',redirect_field_name="next")
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
@@ -173,6 +173,7 @@ def product_detailView(request, slug):
         # If the product is already in the cart, increase the quantity
           cart_item.quantity += 1
           cart_item.save()
+          messages.info(request, "Product added to cart Succesfully")
 
     context ={
         "product_details": productdetails
@@ -250,20 +251,9 @@ def password_reset_done(request):
     return render(request, "user/password_reset_done.html")  
 
 
-# shop
-
-def shop(request):
-    
-    return render(request, "shop.html")
-
-def shopdetails(request):
-    
-    return render(request, "shopdetail.html")
-def contact(request):
-    
-    return render(request, "contact.html")
 
 #user cart
+
 def get_user_cart(user):
     cart, created = Cart.objects.get_or_create(user=user)
     return cart
@@ -271,7 +261,7 @@ def get_user_cart(user):
 
 
 #view cart
-@login_required
+@login_required(login_url= '/login/',redirect_field_name="next")
 def view_cart(request):
     cart = get_user_cart(request.user)
     cart_items = cart.items.all()
@@ -325,12 +315,12 @@ def category_detailView(request, id):
     return render(request, "products/category_detail.html",context)
 
 def header(request):
+    getuser = User.objects.get(username = request.user)
     allcartitems = CartItem.objects.filter(user=request.user)
-    
     getcount = allcartitems.count()
     print(getcount)
     context ={
-        "getcount":getcount
+        "getcount":getcount, "getuser":getuser
     }
     return render(request, "header.html",context)
 
@@ -352,7 +342,7 @@ def totalamount(request):
     
 
 #initialize payment
-
+@login_required(login_url= '/login/',redirect_field_name="next")
 def initialize_payment(request):
     cart = get_user_cart(request.user)
     cart_items = cart.items.all()
@@ -453,7 +443,7 @@ def send_receipt_email(email, cart, total_amount):
         fail_silently=False,
     )
     
-@login_required
+@login_required(login_url= '/login/',redirect_field_name="next")
 def shipping_details(request):
     try:
         # Try to get existing shipping details if any
@@ -470,12 +460,29 @@ def shipping_details(request):
         form = ShippingDetailsForm(instance=shipping)
 
     return render(request, 'shipping_details.html', {'form': form})
-
+@login_required(login_url= '/login/',redirect_field_name="next")
 def user_profile(request,username):
     getuser = User.objects.filter(username = username)
     context = {"getuser":getuser}
     return render (request, "user/profile.html",context)
+@login_required(login_url= '/login/',redirect_field_name="next")
+def editprofile ( request, username):
+    userprofiledata = User.objects.filter(username = username)
+    try:
+       address = User.objects.get(username = request.user) 
+    except User.DoesNotExist:
+       address = None
+       
+    if request.method =="POST":
+       address.first_name = request.POST.get("firstname")
+       address.last_name = request.POST.get("lastname")
+       address.email = request.POST.get("email")
+       address.save()
+       messages.info(request,"Profile updated successfully")
+    context = {"userprofiledata": userprofiledata}
+    return render(request, "user/editprofile.html", context)
 
+@login_required(login_url= '/login/',redirect_field_name="next")
 def delete_user_view(request, user_id):
     try:
         user = User.objects.get(id=user_id)
@@ -483,10 +490,12 @@ def delete_user_view(request, user_id):
         return HttpResponse(f"User with ID {user_id} has been deleted.")
     except User.DoesNotExist:
         return HttpResponse(f"User with ID {user_id} does not exist.", status=404)
-
+    
+@login_required(login_url= '/login/',redirect_field_name="next")
 def deleteacc(request):
     return render(request, "user/deleteacc.html")
-@login_required
+
+@login_required(login_url= '/login/',redirect_field_name="next")
 def order_history_view(request, username):
     
     getuser = User.objects.get(username = username)
@@ -496,14 +505,14 @@ def order_history_view(request, username):
     
     
 # user to add products
-
+@login_required(login_url= '/login/',redirect_field_name="next")
 def addproducts(request):
     form = ProductForm(request.POST)
     if request.method =="POST":
        if form.is_valid():
           form.save()
        messages.info(request,"product added Successfully!")
-    return render(request, "user/addproducts.html",{"form":form})
+    return render(request, "admin/addproducts.html",{"form":form})
 
 # view product lists by user
 def userproductlist(request):
@@ -518,4 +527,55 @@ def getalluser(request):
     context = {"getusers":getusers}
     print(getusers)
     return render(request, "allusers.html",context)
+# user address
 
+def useraddress(request, username):
+  
+    getuser = User.objects.filter(username = username)
+    
+    context = {"getuser":getuser}
+    return render(request, 'user/address.html', context)
+
+def editaddress(request, username):
+    getuser = User.objects.filter(username = username)
+    try:
+       address = User.objects.get(username = request.user) 
+    except User.DoesNotExist:
+       address = None
+       
+    if request.method =="POST":
+       address.address = request.POST.get("editaddress")
+       address.save()
+       messages.info(request,"Address updated successfully")
+    context ={"getuser":getuser}
+    return render(request, 'user/editaddress.html', context)
+@login_required(login_url= '/login/',redirect_field_name="next")
+def adminlightdasboardview(request):
+    post = Products.objects.all() 
+    # paginate products list
+    paginator = Paginator(post, 2) # number of producsts to display per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    context ={ "page_obj":page_obj}
+    
+    return render(request, "admin/adminlightdashboard.html",context)
+
+@login_required(login_url= '/login/',redirect_field_name="next")
+def admindeleteproducts(request, product_id):
+    try:
+        deleteproduct = Products.objects.get(id = product_id)
+        deleteproduct.delete()
+        
+    except Products.DoesNotExist:
+        messages.info(request,"product does'nt exist")
+    return HttpResponse("Deleted successfully")
+
+# i want to add trash later
+    
+def editproducts(request):
+    user = request.user.is_superuser
+    getproduct = Products.objects.filter(username = user)
+    context = {"getproduct": getproduct}
+    return render("admin/editproduct.html", context)
+    

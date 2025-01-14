@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+<style>
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        width: 25vw;
+        height: 6vh;
+        background-color: black;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        color: white;
+    }
+    .mix{
+        color: rgba(243, 168, 5, 0.97)
+    }
+
+    table {
+        width: 80%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    .title{
+        font-size: 25px;
+        padding: 15px;
+        text-align: center;
+        color: white;
+        background-color: #444;
+    }
+
+    td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    .new .button {
+        cursor: pointer;
+        color: rgba(243, 168, 5, 0.97);
+        border: none;
+        background-color: black;
+        width: 5vw;
+        height: 5vh;
+        gap: 40px;
+    }
+
+    .new{
+        display: flex;
+        gap: 40px;
+    }
+  
+
+    @media screen and (max-width: 950px) {
+        table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .container{
+        display: flex;
+        padding: 0%;
+        flex-direction: column;
+    }
+    .h1{
+        width: 100%;
+        text-align: center;
+        color: #333;
+        background-color: black;
+        color: white;
+    }
+    .title{
+        width: 100%;
+        font-size: 15px;
+    }
+    .tr{
+        width: 100%;
+    }
+    .new .button{
+        width: 100%;
+    }
+    .heading{
+        width: 100%;
+    }
+
+
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class ="heading"><span class="mix">ALL</span> PRODUCT!!</h1><br>
+        <table>
+            <tr class="title">
+                <th><span style="color: rgba(243, 168, 5, 0.97);">PRODUCT</span> NAMES</th>
+                <th>PRICE</th>
+                <th><span style="color: rgba(243, 168, 5, 0.97);">ACTION</span></th>
+            </tr>
+            {% for product in page_obj %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.discountedprice}}</td>
+                <td>
+                    <div class="new">
+                        <button class="button" ><a href="{% url "admin-deleteproduct" product.id %}">Delete </a>
+
+                        </button>
+                        <button class="button" >Edit
+
+                        </button>
+                    </div>
+                </td>
+                
+            </tr>
+            {% endfor %}
+
+        </table>
+        
+
+    </div>
+      {% if page_obj.has_previous %}
+      <a href="?page={{page_obj.previous_page_number}}">Previous </a>
+      {% endif %}
+      {% if page_obj.has_next %}
+      <a href="?page={{page_obj.next_page_number}}">Next </a>
+      {% endif %}
+
+    {% endblock %}
+    {% block footer %}
+    {% include "footer.html" %}
+    
+    {% endblock %}

@@ -21,9 +21,6 @@ urlpatterns =[
      path('password_reset/done/', views.password_reset_done, name='password_reset_done'),
      path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
      path('reset/done/', views.password_reset_complete, name='password_reset_complete'),
-     path("shop", views.shop, name="shop"),
-     path("shop-details", views.shopdetails, name="shopdetails"),
-     path("contact", views.contact, name="contact-us"),
      path('cartlist/', views.cartlist, name='cartlist'),
     # path('cart/add/<int:id>/', views.add_to_cart, name='add_to_cart'),
      path("checkout/", views.shipping_details, name="checkout"),
@@ -39,5 +36,9 @@ urlpatterns =[
      path("addproduct/", views.addproducts, name="addproducts"),
      path("userproducts/", views.userproductlist, name="userproductlist"),
      path("users/", views.getalluser, name="allusers"),
- 
+     path("user-address/<username>/", views.useraddress, name="user-address"),
+     path("editaddres/<username>/",views.editaddress, name="editaddress"),
+     path("editprofile/<username>/",views.editprofile, name="editprofile"),
+     path("admin-access/", views.adminlightdasboardview, name="adminlightdashboardview"),
+     path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
 ]

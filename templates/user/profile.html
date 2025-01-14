@@ -145,8 +145,8 @@
             <aside class="sidebar">
                 <ul>
                     <li><a href="#personal-info">Personal Info</a></li>
-                    <li><a href="#order-history">Order History</a></li>
-                    <li><a href="#address-book">Address Book</a></li>
+                    <li><a href="{% url 'order_history' user.username %}">Order History</a></li>
+                    <li><a href="{% url 'user-address' user.username %}">Address Book</a></li>
                 </ul>
             </aside>
 
@@ -160,25 +160,14 @@
                         <div class="profile-details">
                             <p><strong>Name:</strong> {{user.first_name}} {{ user.last_name}}</p>
                             <p><strong>Email:</strong> {{user.email}}</p>
-                            <button>Edit Profile</button>
+                            <button><a href = "{% url "editprofile" user.username %}">Edit Profile</a></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Order History Section -->
-                <div id="order-history" class="section">
-                    <h2>Order History</h2>
-                    <button> <a href="{% url 'order_history' user.username %}">View Order History</a></button>
-                   
-                </div>
+               
 
-                <!-- Address Book Section -->
-                <div id="address-book" class="section">
-                    <h2>Address Book</h2>
-                    <p><strong>Primary Address:</strong> {{user.address}}</p>
-                    <p><strong>Shipping Address:</strong> 456 Elm St, Los Angeles, CA</p>
-                    <button>Edit Address</button>
-                </div>
+                
                   <!-- update profile Section -->
                   <div id="address-book" class="section">
                     <h2>Update Profile</h2>

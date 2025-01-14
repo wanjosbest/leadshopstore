@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+<form action="" method="post">
+{% csrf_token %}
+{% for address in getuser %}
+<div>
+    <label>
+        Edit:
+    </label>
+    <input type ="text" name="editaddress" value="{{address.address}}" class="w-50">
+</div>
+
+<button>Save</button>
+</form>
+{% endfor %}
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+{% for profile in userprofiledata %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div>
+<label>FirstName:</label><br>
+<input type="text" value="{{profile.first_name}}" name ="firstname"class="w-50"><br>
+<label>LastName:</label><br>
+<input type="text" value="{{profile.last_name}}" name ="lastname"class="w-50"><br>
+<label>Email:</label><br>
+<input type="email" value="{{profile.email}}" name ="email"class="w-50"><br> <br>
+<button>Save </button>
+</div>
+</form>
+{%endfor %}
+{% endblock %}
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}
