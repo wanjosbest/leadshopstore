@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,ShippingDetails, OrderHistory)
+                     Review,ShippingDetails, OrderHistory,Pages)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -29,6 +29,7 @@ from django.core.paginator import Paginator
 
 def index(request):
     getcouroseldetails = carousel.objects.all()
+   
     getspecialoffers = special_offer.objects.all()
     getcategory = category.objects.all()
     getfeaturedproducts = featured_products.objects.all()
@@ -393,21 +394,19 @@ def verify_payment(request):
             # Fetch the cart using metadata or session data
             cart = Cart.objects.get(user=request.user, paid=False)
             cart_items = cart.items.all()
-
             # Mark the cart as paid
             cart.paid = True
             cart.save()
-
+            getquantity = CartItem.objects.filter(user=request.user)
+            total_price = sum(item.product.discountedprice * item.quantity for item in cart_items)
+            Quantity = getquantity.quantity
+            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email, quantity = Quantity)
+            savedetails.save()
             # Clear the cart items
             cart_items.delete()
-
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
-            total_price = initialize_payment(request).total_price
-            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email)
-            savedetails.save()
             return render(request, 'products/payment_success.html', {'cart': cart})
-
     return render(request, 'products/payment_error.html', {'message': 'Payment verification failed.'})
 
 #webhook
@@ -438,7 +437,7 @@ def send_receipt_email(email, cart, total_amount):
     send_mail(
         subject,
         message,
-        'josephwandiyahyel3@gmail.com',  # Replace with your sender email
+        'josephwandiyahyel3@gmail.com',  
         [email],
         fail_silently=False,
     )
@@ -500,7 +499,7 @@ def order_history_view(request, username):
     
     getuser = User.objects.get(username = username)
     orders = OrderHistory.objects.filter(user=getuser)
-    
+   
     return render(request, 'user/order_history.html', {'orders': orders})
     
     
@@ -579,3 +578,9 @@ def editproducts(request):
     context = {"getproduct": getproduct}
     return render("admin/editproduct.html", context)
     
+# about us page
+
+def aboutus(request):
+    Getpage = Pages.objects.filter(slug ="about-us")
+    context = {"aboutus":Getpage}
+    return render(request, "aboutus.html",context)

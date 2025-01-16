@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import cloudinary
 from pathlib import Path
-
+import cloudinary.uploader
+import cloudinary.api
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store',
     'django.contrib.sitemaps',
+    'cloudinary',
+
 ]
 
 MIDDLEWARE = [
@@ -52,6 +55,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'onlineshop.urls'
+
+cloudinary.config(
+    cloud_name="dtn2ei68w",
+    api_key="885758177362334",
+    api_secret="2snd5n3R1uZicMT6vF6BElqp0EY"
+)
 
 TEMPLATES = [
     {

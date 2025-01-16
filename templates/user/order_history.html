@@ -2,22 +2,103 @@
 
 {% block header %}
 {% include "header.html" %}
-
+<style>
+    *{
+        padding: 0%;
+        margin: 0%;
+        box-sizing: border-box;}
+      
+        body{
+          background-color: rgb(247, 242, 237);
+          display: flex;
+          flex-direction:column ;
+          justify-self: center;
+          padding-top: 20px;
+        }
+        table, tr, td{
+          border-collapse: collapse ;
+          flex-direction: column;
+          width: 90vw;
+          padding: 10px;
+          cursor: pointer;
+      
+        }
+      
+      th{
+        background-color: rgb(53, 51, 51);
+        box-shadow: 2px rgb(199, 230, 240);
+        color: white;
+        font-size: 20px;
+        font-weight: 500;
+        padding: 10px;
+      }
+      td{ 
+        padding: 30px;
+        width: 40vw;
+        
+        
+      }
+      table,th,td{
+        border:3px solid rgb(27, 26, 26);
+        border-radius: 5px;
+        
+      }
+      
+      tr:hover{
+        background-color: rgb(10, 10, 10);
+        color: white;
+      }
+        
+      h3{
+        box-shadow: transparent black;
+        text-align: center;
+        color: black;
+        padding: 10px;
+        font-size: xx-large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        
+      }
+      
+      
+      @media screen and (max-width:950px) {
+        table{margin: 0 50px;
+          
+          
+          
+        }
+        
+      }
+</style>
 {% endblock %}
 
 {% block body %}
-    <h1>Order History</h1>
-    <ul>
-        {% for order in orders %}
-            <li>
-                Order #{{ order.id }} - Product: {{ order.product }} - Status: {{ order.status }} - Total: ${{ order.total_amount }} - Email: {{ order.customer_email }} 
-             
-            </li>
-        {% empty %}
-            <li>No orders found.</li>
+<div class="wrapp">
+
+    <div>
+      <h3>PURCHASE</h3>
+    </div>
+      
+        <table>
+          <tr>
+            <th>Productname:</th>
+            <th>Price:</th>
+            <th class="use">User:</th>
+            <th>Quantity:</th>
+            <th>Status:</th>
+          </tr>
+          {% for order in orders %}
+          <tr>
+            <td>{{order.product}}</td>
+            <td>{{order.total_amount}}</td>
+            <td>{{order.user}}</td>
+            <td>{{order.name}}</td>
+            <td>{{order.status}}</td>
+          </tr>
         {% endfor %}
-    </ul>
-  
+        
+        
+        </table>
+  </div>
     {% endblock %}
 
     {% block footer %}

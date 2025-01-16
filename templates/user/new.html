@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>Order History</h1>
+    <ul>
+        {% for order in orders %}
+            <li>
+                Order #{{ order.id }} - Product: {{ order.product }} - Status: {{ order.status }} - Total: ${{ order.total_amount }} - Email: {{ order.customer_email }} 
+             
+            </li>
+        {% empty %}
+            <li>No orders found.</li>
+        {% endfor %}
+    </ul>
+  
+    {% endblock %}
+
+    {% block footer %}
+    {% include "footer.html" %}
+    
+    {% endblock %}

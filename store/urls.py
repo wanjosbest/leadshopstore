@@ -41,4 +41,6 @@ urlpatterns =[
      path("editprofile/<username>/",views.editprofile, name="editprofile"),
      path("admin-access/", views.adminlightdasboardview, name="adminlightdashboardview"),
      path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
+     
+     path("about-us/", views.aboutus, name="about-us"),
 ]
