@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 import uuid
+from uuid import uuid4
 import requests
 from django.conf import settings
 from django.http import JsonResponse
@@ -343,37 +344,45 @@ def totalamount(request):
     
 
 #initialize payment
-@login_required(login_url= '/login/',redirect_field_name="next")
+@login_required(login_url='/login/', redirect_field_name="next")
 def initialize_payment(request):
-    cart = get_user_cart(request.user)
+    # Fetch the user's cart
+    cart = get_user_cart(request.user)  # Replace with your actual function to fetch the user's cart
+    if not cart or not cart.items.exists():
+        return render(request, 'products/payment_error.html', {'message': 'No active cart or cart is empty.'})
+    
+    # Calculate total price of items in the cart
     cart_items = cart.items.all()
     total_price = sum(item.get_total_price() for item in cart_items)
-
     if total_price <= 0:
         return render(request, 'products/payment_error.html', {'message': 'Cart is empty.'})
 
-    # Generate payment reference (can use UUID or similar)
-    reference = f"PAY-{cart.id}-{request.user.id}"
+    # Generate a unique payment reference
+    reference = f"PAY-{uuid4()}"  # Use UUID for unique and secure references
 
     # Prepare data for Paystack API
     headers = {
-        'Authorization': f'Bearer {settings.PAYSTACK_SECRET_KEY}',
+        'Authorization': f'Bearer {settings.PAYSTACK_SECRET_KEY}',  # Ensure PAYSTACK_SECRET_KEY is in your settings.py
     }
     data = {
         'email': request.user.email,
-        'amount': int(total_price * 100),  # Paystack requires amount in kobo
+        'amount': int(total_price * 100),  # Paystack requires the amount in kobo (smallest currency unit)
         'reference': reference,
-        'callback_url': request.build_absolute_uri('/payment/verify/'),  # Redirect here after payment
+        'callback_url': request.build_absolute_uri('/payment/verify/'),  # Ensure this URL is configured correctly
     }
 
+    # Initialize transaction via Paystack API
     url = 'https://api.paystack.co/transaction/initialize/'
     response = requests.post(url, headers=headers, json=data)
 
     if response.status_code == 200:
+        # On success, redirect user to Paystack payment page
         payment_url = response.json()['data']['authorization_url']
-        #return redirect(payment_url)
+        return redirect(payment_url)
     else:
-        return render(request, 'products/payment_error.html', {'message': 'Payment Failed Please Check your Network.'})
+        # Handle API errors 
+        error_message = response.json().get('message', 'An error occurred while initializing payment.')
+        return render(request, 'products/payment_error.html', {'message': error_message})
 
 #verify payments
 
