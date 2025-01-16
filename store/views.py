@@ -170,7 +170,8 @@ def product_detailView(request, slug):
        cart = get_user_cart(request.user)
 
     # Check if the product is already in the cart
-       cart_item, created = CartItem.objects.get_or_create(cart=cart,product_id=product,quantity=Quantity)
+       cart_item, created = CartItem.objects.get_or_create(user= request.user,cart=cart,product_id=product,quantity=Quantity)
+       
        if not created:
         # If the product is already in the cart, increase the quantity
           cart_item.quantity += 1

@@ -146,7 +146,7 @@ class Cart(models.Model):
         verbose_name_plural="Carts"
     
 class CartItem(models.Model):
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     cart = models.ForeignKey(Cart,null=True, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Products,null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, null=True)
