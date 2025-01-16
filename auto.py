@@ -6,7 +6,7 @@ class Vehicle:
     def move(self):
         print("ride")
 
-
+# clss
 class bic(Vehicle):
     def __init__(self, brand, state):
         self.brand = brand
