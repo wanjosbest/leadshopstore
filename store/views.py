@@ -406,9 +406,8 @@ def verify_payment(request):
             # Mark the cart as paid
             cart.paid = True
             cart.save()
-            getquantity = CartItem.objects.filter(user=request.user)
             total_price = sum(item.product.discountedprice * item.quantity for item in cart_items)
-            Quantity = getquantity.quantity
+            Quantity = item.quantity for item in cart_items
             savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email, quantity = Quantity)
             savedetails.save()
             # Clear the cart items
