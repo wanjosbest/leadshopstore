@@ -415,7 +415,6 @@ def verify_payment(request):
             # Mark the cart as paid
             cart.paid = True
             cart.save()
-           
             # Clear the cart items
             cart_items.delete()
             # Send a receipt email
