@@ -379,6 +379,10 @@ def initialize_payment(request):
     if response.status_code == 200:
         # On success, redirect user to Paystack payment page
         payment_url = response.json()['data']['authorization_url']
+        total_price = sum(item.product.discountedprice * item.quantity for item in cart_items)
+        Quantity = [items.quantity for items in cart_items ]
+        savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email, quantity = Quantity)
+        savedetails.save()
         return redirect(payment_url)
     else:
         # Handle API errors 
@@ -407,12 +411,7 @@ def verify_payment(request):
             # Mark the cart as paid
             cart.paid = True
             cart.save()
-            total_price = sum(item.product.discountedprice * item.quantity for item in cart_items)
-            getquantity = CartItem.objects.filter(user =request.user)
-            setquantity = getquantity.quantity
-            Quantity = setquantity
-            savedetails = OrderHistory.objects.create(user = request.user, total_amount=total_price,customer_email = request.user.email, quantity = Quantity)
-            savedetails.save()
+           
             # Clear the cart items
             cart_items.delete()
             # Send a receipt email
