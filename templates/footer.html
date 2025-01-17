@@ -46,7 +46,7 @@
                 <div class="col-md-4 mb-5">
                     <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
                     <p>Sign up for our Newsletter to receive the latest affordable products.</p>
-                    <form action="{% url "footer"%}" method="POST">
+                    <form action="" method="POST">
                         {% csrf_token %}
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Your Email Address" name="email">
