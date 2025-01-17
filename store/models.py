@@ -31,7 +31,7 @@ class category(models.Model):
         
 class Product_image(models.Model):
     name = models.CharField(max_length=50, null=True,unique=True)
-    image = CloudinaryField("image", null=True, folder = "img/")
+    image = CloudinaryField("img", null=True)
     
     def __str__(self):
         return self.name 
@@ -233,10 +233,8 @@ class Pages(models. Model):
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     slug = models.SlugField(max_length = 150, null=True)
     content = models.TextField(null=True)
-    def get_upload_folder(self):
-        # Customize folder name (e.g., using product name)
-        return f'Pages/{self.title}'
-    page_image = CloudinaryField('img', null=True)
+    
+    page_image = CloudinaryField('img', null=True, blank=True)
    # , folder=lambda instance: instance.get_upload_folder(),
     def __str__(self):
         return f"{self.title}"

@@ -597,3 +597,9 @@ def staticpages(request,slug):
     Getpage = Pages.objects.filter(slug =slug)
     context = {"pages":Getpage}
     return render(request, "staticpages.html",context)
+
+def footer(request,slug):
+    Getpage = Pages.objects.filter(slug =slug)
+    context = {"pages":Getpage} 
+    
+    return render(request, "footer.html",context)
