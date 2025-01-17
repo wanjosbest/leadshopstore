@@ -42,6 +42,7 @@ urlpatterns =[
      path("admin-access/", views.adminlightdasboardview, name="adminlightdashboardview"),
      path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
      path("pages/<slug:slug>/",views.staticpages, name="static-pages"),
+     path("newsletter/", views.subscribe_newsletter, name="newsletter"),
      
      
    

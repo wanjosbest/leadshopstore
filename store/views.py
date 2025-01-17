@@ -622,7 +622,10 @@ def subscribe_newsletter(request):
                 messages.info(request, 'This email is already subscribed.')
         else:
             messages.error(request, 'Please provide a valid email address.')
-        return redirect('index')
+        return redirect('newsletter')
 
     return render(request, 'footer.html')
 
+def footer(request):
+    
+    return render(request, "footer.html")
