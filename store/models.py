@@ -228,13 +228,15 @@ class OrderHistory(models.Model):
         verbose_name="OrderHistory"
         verbose_name_plural="Order Histories"
 # include static page
-
+def upload_to_folder(instance, filename):
+    # Define the folder path dynamically
+    return f'specific_folder/{filename}'
 class Pages(models. Model):
     title = models.CharField(max_length=50, null=True,unique = True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     slug = models.SlugField(max_length = 150, null=True)
     content = models.TextField(null=True)
-    page_image = CloudinaryField(folder="img/", null=True)
+    page_image = CloudinaryField("image", folder="img", null=True)
     
     def __str__(self):
         return f"{self.title}"
