@@ -3,51 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
 </head>
-<body>
-    <div class="container mt-5 w-50">
-        <!-- Login form -->
-        <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
-            <h1 style="text-align: center;"><span style="color: green;">Leadsstoreshop</span></h1>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-            {% csrf_token %}  <!-- CSRF token for security -->
 
-            <!-- Login heading -->
-            <h3>Login</h3>
-            <hr>
+body{
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding-top:  50px;
+}
 
-            <!-- Display error/success messages -->
-            {% if messages %}
-            <div class="alert alert-primary" role="alert">
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
+.carrying{
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 25%;
+    height: 50%;
+    padding: 30px;
+    border-radius: 20px;
+}
 
-            <!-- Username input field -->
-           
-            <div class="form-group">
-                <label for="exampleInputEmail1">Username</label>
-                <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Enter username" required>
-            </div>
+.login{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: start;
+    justify-content: start;
+    /* background-color: #444; */
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 22px;
 
-            <!-- Password input field -->
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
-            </div>
+}
 
-            <!-- Link to registration page -->
-            <p>Don't have an account <a href="{% url "register" %}">Register</a> </p>
+.login h1{
+    font-size: 40px;
+    /* background-color: brown; */
+}
 
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary">Login</button>
-            <p> <strong><a href = "{% url "password_reset"%}">Forgot Password</a></strong></p>
-        </form>
+.user{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+
+}
+
+.box{
+    width: 40vw;
+    height: 50px;
+    outline: none;
+    padding: 0px 30px 0px 30px;
+    border-radius: 40px;
+    border: 1px solid black;
+}
+.user2{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+
+}
+
+.reg:hover{
+    text-decoration: underline;
+    color: blue;
+}
+
+.summit{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+.summit button{
+    border: none;
+    cursor: pointer;
+    background-color: #444;
+    color: white;
+    font-size: 20px;
+    font-style: italic;
+    font-family: fantasy;
+    letter-spacing: 10px;
+}
+.summit button:hover{
+    background-color: rgb(240, 197, 5);;
+}
+.summit a{
+    text-decoration: none;
+}
+.summit a:hover{
+    text-decoration: underline;
+    color: blue;
+}
+.color{
+    color:  rgb(240, 197, 5);
+}
+
+
+
+
+
+@media screen and (max-width: 950px) {
+    .carrying{
+        width: 100%;
+        height: 100%;
+    }
+
+    .box{
+        width: 75vw;
+        height: 8vh;
+    }
+}
+
+
+
+
+
+
+
+</style>
+<body class=" container">
+       <!-- Display error/success messages -->
+       {% if messages %}
+       <div class="alert alert-primary" role="alert">
+           {% for message in messages %}
+           {{ message }}
+           {% endfor %}
+       </div>
+       {% endif %}
+    <div class="carrying">
+        <div class="login">
+            <h1><span style="color: rgb(240, 197, 5);">Leads</span><span style="color: rgba(54, 51, 51, 0.123);">store</span>shop</h1>
+            <p>Login</p>
+        </div>
+        <form action=""method="POST">
+            {% csrf_token %}
+        <div class="user">
+            <p class="color">Username</p>
+            <input class="box" type="text" name="username" id="" placeholder="Enter Username">
+        </div>
+        <div class="user2">
+            <p class="color">Password</p>
+            <input class="box" type="text" name="password" id="" placeholder="Enter Password">
+            <p><span style="color: rgb(240, 197, 5)">Don't have </span><span style="color: rgba(54, 51, 51, 0.123)"> an account </span> <span class="reg"><a href="{% url "register" %}">Register</a></span> </p>
+        </div>
+        <div class="summit">
+            <button class="box"type="submit">Login</button>
+        </div>
+    </form>
+    <a href = "{% url "password_reset" %}">Forgot Password</a>
     </div>
 </body>
 </html>
