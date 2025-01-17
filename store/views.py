@@ -10,6 +10,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 import uuid
+from django.core.mail import EmailMessage
+from django.utils import timezone
 from uuid import uuid4
 import requests
 from django.conf import settings
@@ -447,14 +449,14 @@ def send_receipt_email(email, cart, total_amount):
         'total_amount': total_amount,
     })
 
-    send_mail(
-        subject,
-        message,
-        'josephwandiyahyel3@gmail.com',  
-        [email],
-        fail_silently=False,
-    )
-    
+    sending = EmailMessage(
+        subject = subject,
+        body = message,
+       from_email = settings.EMAIL_HOST_USER,
+       to = [email],
+       )
+    sending.content_subtype = "html"
+    sending.send(fail_silently=False,)
 @login_required(login_url= '/login/',redirect_field_name="next")
 def shipping_details(request):
     try:
@@ -607,11 +609,11 @@ def subscribe_newsletter(request):
             if not NewsletterSubscription.objects.filter(email=email).exists():
                 # Save the subscription
                 NewsletterSubscription.objects.create(email=email)
-                
+                year = timezone.now().year,
                 # Send a thank-you email
                 send_mail(
                     'Thank You for Subscribing!',
-                    'Dear Subscriber,\n\nThank you for subscribing to our newsletter. Stay tuned for updates!\n\nBest regards,\nLeadStoreShop',
+                    'Dear Subscriber,\n\nThank you for subscribing to our newsletter. Stay tuned for updates!\n\nBest regards,\n f"copyright {year}" LeadStoreShop. All rights reserved.',
                     settings.EMAIL_HOST_USER,
                     [email],
                     fail_silently=False,
