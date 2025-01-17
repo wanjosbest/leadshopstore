@@ -410,10 +410,10 @@ def verify_payment(request):
 
         if result['status'] == 'success':
             # Fetch the cart using metadata or session data
-            cart = get_object_or_404(Cart, user=request.user, paid=False)
+            cart = get_object_or_404(Cart, user=request.user)
             cart_items = cart.items.all()
             # Mark the cart as paid
-            cart.paid = True
+           
             cart.save()
             # Clear the cart items
             cart_items.delete()
