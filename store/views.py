@@ -593,7 +593,7 @@ def editproducts(request):
     
 # about us page
 
-def aboutus(request):
-    Getpage = Pages.objects.filter(slug ="about-us")
-    context = {"aboutus":Getpage}
-    return render(request, "aboutus.html",context)
+def staticpages(request,slug):
+    Getpage = Pages.objects.filter(slug =slug)
+    context = {"pages":Getpage}
+    return render(request, "staticpages.html",context)

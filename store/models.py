@@ -192,7 +192,7 @@ class Review(models.Model):
         verbose_name_plural="Reviews"
    
 class ShippingDetails(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)  # link to user
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)  # link to user
     recipient_name = models.CharField(max_length=255,null=True)
     address_line_1 = models.CharField(max_length=255,null=True)
     address_line_2 = models.CharField(max_length=255, blank=True,null=True)

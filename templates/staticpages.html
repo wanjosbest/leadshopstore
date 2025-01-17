@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block body %}
+{% for pages in pages %}
+<!-- page title-->
+<h1> {{pages.title}}</h1>
+<!-- if there is image-->
+{% if pages.page_image %}
+<img src="{{pages.page_image.url}}" style="height:300px; width:400px;">
+{% endif %}
+
+<!-- page content-->
+
+<p>{{pages.content}}</p>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+
+{% endblock %}
