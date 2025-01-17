@@ -56,7 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'onlineshop.urls'
-"""
+
 cloudinary.config(
     cloud_name="dtn2ei68w",
     api_key="885758177362334",
@@ -68,6 +68,7 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '885758177362334',
     'API_SECRET': '2snd5n3R1uZicMT6vF6BElqp0EY',
 }
+"""
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 TEMPLATES = [
     {
