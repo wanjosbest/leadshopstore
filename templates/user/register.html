@@ -3,79 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Register</title>
 </head>
-<body>
-    <div class="container mt-5">
-        <!-- Registration form -->
-        <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
-            {% csrf_token %}  <!-- CSRF token for security -->
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+   a{text-decoration:none;}
 
-            <!-- Registration form heading -->
-            <h1 style="text-align: center;"><span style="color: green;">Leadsstoreshop</span></h1>
-            <h3>Register</h3>
-            <hr>
+body{
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding-top:  50px;
+}
 
-            <!-- Display error/success messages -->
-            {% if messages %}
-            <div class="alert alert-primary" role="alert">
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
+.carrying{
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 25%;
+    height: 50%;
+    padding: 30px;
+    border-radius: 20px;
+}
 
-            <!-- First Name input field -->
-            <div class="form-group">
-                <label for="exampleInputEmail1">First name</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Enter First name" name="firstname" required>
-            </div>
+.login{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: start;
+    justify-content: start;
+    /* background-color: #444; */
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 22px;
 
-            <!-- Last Name input field -->
-            <div class="form-group">
-                <label for="exampleInputEmail1">Last name</label>
-                <input type="text" name="lastname" class="form-control" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Enter Last name" required>
-            </div>
+}
 
-            <!-- Username input field -->
-            <div class="form-group">
-                <label for="exampleInputEmail1">Username</label>
-                <input type="text" class="form-control" name="username" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Username " required>
-            </div>
+.login h1{
+    font-size: 40px;
+    /* background-color: brown; */
+}
 
-            <!-- Password input field -->
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" name="password" id="exampleInputPassword1"
-                    placeholder="Password" required>
-            </div>
-              <!-- Email input field -->
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="text" class="form-control" name="email" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Enter email" required>
-            </div>
-              <!-- address input field -->
-              <div class="form-group">
-                <label for="exampleInputEmail1">Address</label>
-                <input type="text" class="form-control" name="address" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="Enter Your Address" required>
-            </div>
-            <div class="form-group">
-                <label for="image">Image</label>
-                <input type="file" name="image" class="form-control" id="image"
-                    aria-describedby="image" placeholder="Upload Image" required>
-            </div>
-            <!-- Link to login page for users who already have an account -->
-            <p>Already have an account <a href="{% url "login" %}">Login</a> </p>
+.user{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
 
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+}
+
+.box{
+    width: 40vw;
+    height: 50px;
+    outline: none;
+    padding: 0px 30px 0px 30px;
+    border-radius: 40px;
+    border: 1px solid black;
+}
+.user2{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+
+}
+
+.reg:hover{
+    text-decoration: underline;
+    color: blue;
+}
+
+.summit{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+.summit button{
+    border: none;
+    cursor: pointer;
+    background-color: #444;
+    color: white;
+    font-size: 20px;
+    font-style: italic;
+    font-family: fantasy;
+    letter-spacing: 10px;
+}
+.summit button:hover{
+    background-color: rgb(240, 197, 5);;
+}
+.summit a{
+    text-decoration: none;
+}
+.summit a:hover{
+    text-decoration: underline;
+    color: blue;
+}
+.color{
+    color:  rgb(240, 197, 5);
+}
+
+
+
+
+
+@media screen and (max-width: 950px) {
+    .carrying{
+        width: 100%;
+        height: 100%;
+    }
+
+    .box{
+        width: 75vw;
+        height: 8vh;
+    }
+}
+
+
+
+
+
+
+
+</style>
+<body class=" container">
+       <!-- Display error/success messages -->
+       {% if messages %}
+       <div class="alert alert-primary" role="alert">
+           {% for message in messages %}
+           {{ message }}
+           {% endfor %}
+       </div>
+       {% endif %}
+    <div class="carrying">
+        <div class="login">
+            <h1><span style="color: rgb(240, 197, 5);">Leads</span><span style="color: #444;">store</span>shop</h1>
+            <p>Register</p>
+        </div>
+        <form action=""method="POST">
+            {% csrf_token %}
+        <div class="user">
+            <p class="color">First Name</p>
+            <input class="box" type="text" name="firstname" id="" placeholder="Enter First Name">
+        </div>
+        <div class="user">
+            <p class="color">Last Name</p>
+            <input class="box" type="text" name="lastname" id="" placeholder="Enter Last Name">
+        </div>
+        <div class="user">
+            <p class="color">Username</p>
+            <input class="box" type="text" name="username" id="" placeholder="Enter Username">
+        </div>
+        <div class="user2">
+            <p class="color">Password</p>
+            <input class="box" type="text" name="password" id="" placeholder="Enter Password">
+            <p><span style="color: rgb(240, 197, 5)">Don't have </span><span style="color: #444;"> an account </span> <span class="reg"><a href="{% url "register" %}">Register</a></span> </p>
+        </div>
+        <div class="user">
+            <p class="color">Email</p>
+            <input class="box" type="email" name="email" id="" placeholder="Enter Email">
+        </div>
+        <div class="user">
+            <p class="color">Address</p>
+            <input class="box" type="text" name="address" id="" placeholder="Enter Address">
+        </div>
+        <div class="summit">
+            <button class="box"type="submit">Register</button>
+        </div>
+    </form>
+     Already have Account? <a href = "{% url "login" %}">Login</a>
     </div>
 </body>
 </html>

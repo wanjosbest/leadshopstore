@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <style>
     *{
@@ -12,7 +12,7 @@
         box-sizing: border-box;
     }
 
-
+    a{text-decoration:none;}
 body{
     background-color: whitesmoke;
     display: flex;
@@ -153,7 +153,7 @@ body{
        {% endif %}
     <div class="carrying">
         <div class="login">
-            <h1><span style="color: rgb(240, 197, 5);">Leads</span><span style="color: rgba(54, 51, 51, 0.123);">store</span>shop</h1>
+            <h1><span style="color: rgb(240, 197, 5);">Leads</span><span style="color: #444;">store</span>shop</h1>
             <p>Login</p>
         </div>
         <form action=""method="POST">
@@ -165,7 +165,7 @@ body{
         <div class="user2">
             <p class="color">Password</p>
             <input class="box" type="text" name="password" id="" placeholder="Enter Password">
-            <p><span style="color: rgb(240, 197, 5)">Don't have </span><span style="color: rgba(54, 51, 51, 0.123)"> an account </span> <span class="reg"><a href="{% url "register" %}">Register</a></span> </p>
+            <p><span style="color: rgb(240, 197, 5)">Don't have </span><span style="color: #444;"> an account </span> <span class="reg"><a href="{% url "register" %}">Register</a></span> </p>
         </div>
         <div class="summit">
             <button class="box"type="submit">Login</button>
