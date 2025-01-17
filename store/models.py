@@ -236,8 +236,8 @@ class Pages(models. Model):
     def get_upload_folder(self):
         # Customize folder name (e.g., using product name)
         return f'Pages/{self.title}'
-    page_image = CloudinaryField('image', folder=lambda instance: instance.get_upload_folder(), null=True)
-    
+    page_image = CloudinaryField('img', null=True)
+   # , folder=lambda instance: instance.get_upload_folder(),
     def __str__(self):
         return f"{self.title}"
     class Meta:
