@@ -43,5 +43,6 @@ urlpatterns =[
      path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
      path("pages/<slug:slug>/",views.staticpages, name="static-pages"),
      
+     
    
 ]

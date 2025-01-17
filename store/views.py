@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,ShippingDetails, OrderHistory,Pages)
+                     Review,ShippingDetails, OrderHistory,Pages,NewsletterSubscription)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -415,10 +415,10 @@ def verify_payment(request):
             # Mark the cart as paid
            
             cart.save()
-            # Clear the cart items
-            cart_items.delete()
             # Send a receipt email
             send_receipt_email(request.user.email, cart, result['amount'] / 100)
+            # Clear the cart items
+            cart_items.delete()
             return render(request, 'products/payment_success.html', {'cart': cart})
     return render(request, 'products/payment_error.html', {'message': 'Payment verification failed.'})
 
@@ -598,8 +598,31 @@ def staticpages(request,slug):
     context = {"pages":Getpage}
     return render(request, "staticpages.html",context)
 
-def footer(request,slug):
-    Getpage = Pages.objects.filter(slug =slug)
-    context = {"pages":Getpage} 
-    
-    return render(request, "footer.html",context)
+# newsletter subscription
+
+def subscribe_newsletter(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            if not NewsletterSubscription.objects.filter(email=email).exists():
+                # Save the subscription
+                NewsletterSubscription.objects.create(email=email)
+                
+                # Send a thank-you email
+                send_mail(
+                    'Thank You for Subscribing!',
+                    'Dear Subscriber,\n\nThank you for subscribing to our newsletter. Stay tuned for updates!\n\nBest regards,\nLeadStoreShop',
+                    settings.EMAIL_HOST_USER,
+                    [email],
+                    fail_silently=False,
+                )
+
+                messages.success(request, 'Thank you for subscribing to our newsletter!')
+            else:
+                messages.info(request, 'This email is already subscribed.')
+        else:
+            messages.error(request, 'Please provide a valid email address.')
+        return redirect('index')
+
+    return render(request, 'footer.html')
+

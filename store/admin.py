@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (User, category, Products, subcategory,carousel,special_offer,featured_products, Product_image,
-                     CartItem, Order, Cart,Review,ShippingDetails, OrderHistory,Pages
+                     CartItem, Order, Cart,Review,ShippingDetails, OrderHistory,Pages,NewsletterSubscription
                      )
 
 admin.site.register(User)
@@ -13,6 +13,7 @@ admin.site.register(Review)
 admin.site.register(ShippingDetails)
 
 admin.site.register(OrderHistory)
+admin.site.register(NewsletterSubscription)
 
 
 class subcategoryAdmin(admin.ModelAdmin):  # Use the regular ModelAdmin

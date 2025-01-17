@@ -34,14 +34,25 @@
                         <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                     </div>
                 </div>
+
+                <!--newsletter subs-->
+                {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+             {% endif %}
                 <div class="col-md-4 mb-5">
                     <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
                     <p>Sign up for our Newsletter to receive the latest affordable products.</p>
-                    <form action="">
+                    <form action="{% url "footer"%}" method="POST">
+                        {% csrf_token %}
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Your Email Address">
+                            <input type="text" class="form-control" placeholder="Your Email Address" name="email">
                             <div class="input-group-append">
-                                <button class="btn btn-primary">Sign Up</button>
+                                
+                                <input class="btn btn-primary" type="submit" Value = "Sign Up">
                             </div>
                         </div>
                     </form>
