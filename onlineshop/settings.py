@@ -69,7 +69,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': '2snd5n3R1uZicMT6vF6BElqp0EY',
 }
 """
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
