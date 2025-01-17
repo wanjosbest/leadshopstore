@@ -4,7 +4,6 @@ from django.urls import reverse
 from cloudinary.models import CloudinaryField
 
 
-
 #tutor register
 class User(AbstractUser):
     email = models.EmailField(null =True, unique=True, max_length=100)
@@ -228,15 +227,16 @@ class OrderHistory(models.Model):
         verbose_name="OrderHistory"
         verbose_name_plural="Order Histories"
 # include static page
-def upload_to_folder(instance, filename):
-    # Define the folder path dynamically
-    return f'specific_folder/{filename}'
+
 class Pages(models. Model):
     title = models.CharField(max_length=50, null=True,unique = True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     slug = models.SlugField(max_length = 150, null=True)
     content = models.TextField(null=True)
-    page_image = CloudinaryField("image", folder="img", null=True)
+    def get_upload_folder(self):
+        # Customize folder name (e.g., using product name)
+        return f'Pages/{self.title}'
+    page_image = CloudinaryField('image', folder=lambda instance: instance.get_upload_folder(), null=True)
     
     def __str__(self):
         return f"{self.title}"

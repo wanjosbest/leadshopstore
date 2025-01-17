@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'store',
     'django.contrib.sitemaps',
     'cloudinary',
+    'cloudinary_storage',
 
 ]
 
@@ -55,13 +56,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'onlineshop.urls'
-
+"""
 cloudinary.config(
     cloud_name="dtn2ei68w",
     api_key="885758177362334",
     api_secret="2snd5n3R1uZicMT6vF6BElqp0EY"
 )
-
+"""
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dtn2ei68w',
+    'API_KEY': '885758177362334',
+    'API_SECRET': '2snd5n3R1uZicMT6vF6BElqp0EY',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
