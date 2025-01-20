@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,ShippingDetails, OrderHistory,Pages,NewsletterSubscription)
+                     Review,ShippingDetails, OrderHistory,NewsletterSubscription)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -629,5 +629,25 @@ def subscribe_newsletter(request):
     return render(request, 'footer.html')
 
 def footer(request):
-    
     return render(request, "footer.html")
+
+
+def contact (request):
+    #accept contact
+    if request.method =="POST":
+       name = request.POST.get("name")
+       email = request.POST.get("email")
+       subject = request.POST.get("subject")
+       content = request.POST.get("content")
+       subjectDetails = f"{subject} By {name}"
+       
+       send_mail(
+           subject = subjectDetails,
+           body = content, 
+           from_email = email,
+           to = [settings.EMAIL_HOST_USER],
+           fail_silently=True,
+       )
+       messages.success(request, 'Thank you for contacting us, please Wait patiently for our Response')
+    return render(request, "contact.html")
+

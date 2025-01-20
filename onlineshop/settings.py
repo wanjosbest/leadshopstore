@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #'store.context_processors.footer_pages' # added footer pages as context processor
             ],
         },
     },
@@ -103,8 +104,21 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
+"""
+DATABASES = {
+    "default":{
+        "ENGINE": "django.db.backends.mysql",
+        "NAME":"leadstore_db",
+        "HOST":"localhost",
+        "USER":"root",
+        "PORT":"3306",
+        "PASSWORD": "0903620Wanjos@#$",
+        'OPTIONS':{
+         'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'"
+        }
+    }
+}
+"""
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

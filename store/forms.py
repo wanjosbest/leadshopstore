@@ -31,7 +31,9 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 class PasswordResetRequestForm(forms.Form):
     email = forms.EmailField(label="Email Address", max_length=254)
-    
+    widgets = {
+        'email': forms.TextInput(attrs={'class':'form-control'}),
+    }
     
 class CustomSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(

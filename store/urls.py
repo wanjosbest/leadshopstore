@@ -43,7 +43,7 @@ urlpatterns =[
      path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
      path("pages/<slug:slug>/",views.staticpages, name="static-pages"),
      path("newsletter/", views.subscribe_newsletter, name="newsletter"),
-     
-     
+     path('footer/', views.footer, name='footer'),
+     path("contact-us/",views.contact, name="contact-us"),
    
 ]

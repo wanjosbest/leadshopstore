@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (User, category, Products, subcategory,carousel,special_offer,featured_products, Product_image,
-                     CartItem, Order, Cart,Review,ShippingDetails, OrderHistory,Pages,NewsletterSubscription
+                     CartItem, Order, Cart,Review,ShippingDetails, OrderHistory,NewsletterSubscription
                      )
 
 admin.site.register(User)
@@ -16,16 +16,14 @@ admin.site.register(OrderHistory)
 admin.site.register(NewsletterSubscription)
 
 
+
 class subcategoryAdmin(admin.ModelAdmin):  # Use the regular ModelAdmin
   search_fields=['sub_category_name']
   prepopulated_fields = {'slug': ('sub_category_name',)}
   
 admin.site.register(subcategory)
 
-class PagesAdmin(admin.ModelAdmin):
-  prepopulated_fields = {'slug': ('title',)}
-  
-admin.site.register(Pages, PagesAdmin)
+
   
   
 class ProductAdmin(admin.ModelAdmin):  # Use the regular ModelAdmin

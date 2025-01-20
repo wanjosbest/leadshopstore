@@ -23,7 +23,7 @@ from store.sitemaps import ProductSitemap
 
 
 urlpatterns = [
-    path('dashboard/', admin.site.urls),
+    path('admin/access/', admin.site.urls),
     path('admin/', admin.site.urls),
     path("", include("store.urls")),
     path('sitemap.xml', sitemap, {'sitemaps': {'article' : ProductSitemap}},),

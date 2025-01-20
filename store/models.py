@@ -228,19 +228,8 @@ class OrderHistory(models.Model):
         verbose_name_plural="Order Histories"
 # include static page
 
-class Pages(models. Model):
-    title = models.CharField(max_length=50, null=True,unique = True)
-    date_added = models.DateTimeField(auto_now_add=True, null=True)
-    slug = models.SlugField(max_length = 150, null=True)
-    content = models.TextField(null=True)
-    
-    page_image = CloudinaryField('img', null=True, blank=True)
-   # , folder=lambda instance: instance.get_upload_folder(),
-    def __str__(self):
-        return f"{self.title}"
-    class Meta:
-        verbose_name="Pages"
-        verbose_name_plural="Pages"
+
+        
 
 
 #newsletter subscription
