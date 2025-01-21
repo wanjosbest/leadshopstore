@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse, redirect,get_object_or_404
 from .models import (User,Products, carousel,special_offer,category,featured_products,subcategory,CartItem,Order,Cart,
-                     Review,ShippingDetails, OrderHistory,NewsletterSubscription)
+                     Review,ShippingDetails, OrderHistory,NewsletterSubscription,category)
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.views.generic import ListView,DetailView
@@ -593,12 +593,7 @@ def editproducts(request):
     context = {"getproduct": getproduct}
     return render("admin/editproduct.html", context)
     
-# about us page
 
-def staticpages(request,slug):
-    Getpage = Pages.objects.filter(slug =slug)
-    context = {"pages":Getpage}
-    return render(request, "staticpages.html",context)
 
 # newsletter subscription
 
@@ -632,22 +627,54 @@ def footer(request):
     return render(request, "footer.html")
 
 
-def contact (request):
+def contact(request):
     #accept contact
     if request.method =="POST":
        name = request.POST.get("name")
        email = request.POST.get("email")
        subject = request.POST.get("subject")
        content = request.POST.get("content")
-       subjectDetails = f"{subject} By {name}"
+      
        
        send_mail(
-           subject = subjectDetails,
-           body = content, 
-           from_email = email,
-           to = [settings.EMAIL_HOST_USER],
+           f"{subject} By {name}",
+           content, 
+           email,
+           [settings.EMAIL_HOST_USER],
            fail_silently=True,
        )
        messages.success(request, 'Thank you for contacting us, please Wait patiently for our Response')
-    return render(request, "contact.html")
+    return render(request, "pages/contact.html")
 
+def aboutus(request):
+    
+    return render(request, "pages/aboutus.html")
+
+def howtoupload(request):
+    
+    return render(request, "pages/howtoupload.html")
+
+def disclaimer(request):
+    
+    return render(request, "pages/disclaimer.html")
+
+def services(request):
+    
+    return render(request, "pages/services.html")
+def privacypolicy(request):
+    
+    return render(request, "pages/privacy.html")
+
+def termsconditions(request):
+    
+    return render(request, "pages/termsconditions.html")
+
+
+
+def addingcategorymenu(request,slug):
+    Getcategory = category.objects.all()
+    context = {"category":Getcategory}
+    return render(request, "header.html",context)
+
+def header(request):
+    return render(request, "header.html")

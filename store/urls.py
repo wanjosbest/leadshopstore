@@ -41,9 +41,16 @@ urlpatterns =[
      path("editprofile/<username>/",views.editprofile, name="editprofile"),
      path("admin-access/", views.adminlightdasboardview, name="adminlightdashboardview"),
      path("delete-product/<product_id>/",views.admindeleteproducts, name= "admin-deleteproduct"),
-     path("pages/<slug:slug>/",views.staticpages, name="static-pages"),
      path("newsletter/", views.subscribe_newsletter, name="newsletter"),
      path('footer/', views.footer, name='footer'),
-     path("contact-us/",views.contact, name="contact-us"),
-   
+     #pages
+     path("contact-us/",views.contact, name="contact_us"),
+     path("about-us/",views.aboutus, name="about_us"),
+     path("our-services/",views.services, name="services"),
+     path("disclaimer/",views.disclaimer, name="disclaimer"),
+     path("privacy-policy/",views.privacypolicy, name="privacy_policy"),
+     path("how-to-upload/",views.howtoupload, name="how_to_upload"),
+     path("terms-and-conditions/",views.termsconditions, name="terms_and_conditions"),
+     path("header/",views.header, name="header"),
+       
 ]

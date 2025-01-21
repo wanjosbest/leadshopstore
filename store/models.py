@@ -8,7 +8,7 @@ from cloudinary.models import CloudinaryField
 class User(AbstractUser):
     email = models.EmailField(null =True, unique=True, max_length=100)
     address=models.CharField(max_length=300,null=True,blank=True)
-    image = CloudinaryField( folder="img", null=True,blank=True)
+    image = CloudinaryField(folder="img", null=True,blank=True)
 
     class Meta:
         verbose_name="Users"
@@ -31,7 +31,7 @@ class category(models.Model):
         
 class Product_image(models.Model):
     name = models.CharField(max_length=50, null=True,unique=True)
-    image = CloudinaryField("img", null=True)
+    image = CloudinaryField(folder="img", null=True)
     
     def __str__(self):
         return self.name 

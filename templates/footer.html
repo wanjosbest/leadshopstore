@@ -18,8 +18,12 @@
                    
                     <div class="d-flex flex-column justify-content-start">
                      
-                        <a class="text-secondary mb-2" href=""><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                    
+                        <a class="text-secondary mb-2" href="{% url "contact_us"%}"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        <a class="text-secondary mb-2" href="{% url "about_us"%}"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+                        <a class="text-secondary mb-2" href="{% url "how_to_upload"%}"><i class="fa fa-angle-right mr-2"></i>How to Upload Product</a>
+                        <a class="text-secondary mb-2" href="{% url "terms_and_conditions"%}"><i class="fa fa-angle-right mr-2"></i>Terms & Conditions</a>
+                        <a class="text-secondary mb-2" href="{% url "services"%}"><i class="fa fa-angle-right mr-2"></i>Services</a>
+                        <a class="text-secondary mb-2" href="{% url "privacy_policy"%}"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
                       
                     </div>
                    
@@ -28,12 +32,12 @@
                 <div class="col-md-4 mb-5">
                     <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-secondary mb-2" href="{% url "index"%}"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-secondary mb-2" href="{% url "login"%}"><i class="fa fa-angle-right mr-2"></i>Login</a>
+                        <a class="text-secondary mb-2" href="{% url "register"%}"><i class="fa fa-angle-right mr-2"></i>Register</a>
+                        <a class="text-secondary mb-2" href="{% url "view_cart"%}"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
                         <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                        <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        <a class="text-secondary" href="{% url "disclaimer"%}"><i class="fa fa-angle-right mr-2"></i>Disclaimer</a>
                     </div>
                 </div>
 
@@ -71,10 +75,8 @@
     </div>
     <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
         <div class="col-md-6 px-xl-0">
-            <p class="mb-md-0 text-center text-md-left text-secondary">
-                &copy; <a class="text-primary" href="#">LaedStore</a>. All Rights Reserved. Designed
-                by
-                <a class="text-primary" href="https://htmlcodex.com">Beta Pikin from Tosh</a>
+           <p class="mb-md-0 text-center text-md-left text-secondary">
+            <center>    &copy; <a class="text-primary" href="#">LeadstoreShop</a>. All Rights Reserved. 2025</a></center>
             </p>
         </div>
         <div class="col-md-6 px-xl-0 text-center text-md-right">
