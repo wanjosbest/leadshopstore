@@ -63,9 +63,9 @@ MESSAGE_TAGS = {
 ROOT_URLCONF = 'onlineshop.urls'
 
 cloudinary.config(
-    cloud_name="dtn2ei68w",
-    api_key="885758177362334",
-    api_secret="2snd5n3R1uZicMT6vF6BElqp0EY"
+    cloud_name="dppwajwop",
+    api_key="572375621325748",
+    api_secret="WD0mHYfPgy1kR0_lA00Df6U7Ru4"
 )
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
