@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-<meta name="description" content="{{product_details.meta_descriptions}}">
-<meta name ="keywords" content ="{{product_details.meta_keywords}}">
-<meta name="author" content="{{product_details.user}}">
+
 {% block header %}
+<meta name ="keywords" content ="{{product_details.meta_keywords}}">
+<meta name="description" content="{{product_details.meta_descriptions}}">
+<meta name="author" content="{{product_details.user}}">
 {% include "header.html" %}
 <style>
 
