@@ -40,7 +40,7 @@ class Product_image(models.Model):
         if self.image:
             response = cloudinary.uploader.upload(self.image.file, folder="img/")
             self.image_url = response['secure_url']  # Save the Cloudinary URL
-            self.image = None  # Clear the local file field
+            #self.image = None  # Clear the local file field
         super().save(*args, **kwargs)
 
     
