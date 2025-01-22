@@ -31,14 +31,19 @@ class category(models.Model):
         
 class Product_image(models.Model):
     name = models.CharField(max_length=50, null=True,unique=True)
-    image = models.URLField(max_length=500, blank=True, null=True)
+    image = CloudinaryField( folder="img/", null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)  # Final Cloudinary URL
 
-    def upload_image_to_cloudinary(self, file):
-        # Upload the file to the img/ folder on Cloudinary
-        response = cloudinary.uploader.upload(file, folder='img/')
-        # Save the secure URL to the model
-        self.image = response['secure_url']
-        self.save()
+
+    def save(self, *args, **kwargs):
+        # Upload to Cloudinary if a new image is added
+        if self.image:
+            response = cloudinary.uploader.upload(self.image.file, folder="img/")
+            self.image_url = response['secure_url']  # Save the Cloudinary URL
+            self.image = None  # Clear the local file field
+        super().save(*args, **kwargs)
+
+    
     def __str__(self):
         return self.name 
     def get_absolute_url(self):
