@@ -31,7 +31,7 @@ class category(models.Model):
         
 class Product_image(models.Model):
     name = models.CharField(max_length=50, null=True,unique=True)
-    image = CloudinaryField(folder="img", null=True)
+    image = CloudinaryField('image', folder="img/", null=True)
     
     def __str__(self):
         return self.name 
@@ -85,15 +85,15 @@ class carousel (models.Model):
     carousel_one_product=models.ForeignKey(Products, related_name="carousel_one_products",on_delete=models.CASCADE, null=True)
     carousel_one_title =models.CharField(max_length=100, null =True)
     carousel_one_description = models.TextField(null=True)
-    carousel_one_image = CloudinaryField( folder="img/", null=True)
+    carousel_one_image = CloudinaryField("image", folder="img/", null=True)
     carousel_two_product=models.ForeignKey(Products, related_name="carousel_two_products",on_delete=models.CASCADE, null=True)
     carousel_two_title =models.CharField(max_length=100, null =True)
     carousel_two_description = models.TextField(null=True)
-    carousel_two_image =CloudinaryField( folder="img/", null=True)
+    carousel_two_image =CloudinaryField("image", folder="img/", null=True)
     carousel_three_product=models.ForeignKey(Products, related_name="carousel_three_products",on_delete=models.CASCADE, null=True)
     carousel_three_title =models.CharField(max_length=100, null =True)
     carousel_three_description = models.TextField(null=True)
-    carousel_three_image = CloudinaryField(folder="img/", null=True)
+    carousel_three_image = CloudinaryField("image",folder="img/", null=True)
     
     def __str__(self):
         return self.carousel_title
@@ -106,11 +106,11 @@ class special_offer(models.Model):
     spclofferonetitle = models.CharField(max_length=255,null=True)
     spclofferoneproduct = models.ForeignKey(Products, related_name="spclofferone_products",on_delete=models.CASCADE, null=True)
     spclofferonecommission =models.CharField(max_length=20,null=True)
-    spclofferoneimage = CloudinaryField(folder="img/", null=True)
+    spclofferoneimage = CloudinaryField("image",folder="img/", null=True)
     spcloffertwotitle = models.CharField(max_length=255,null=True)
     spcloffertwoproduct = models.ForeignKey(Products, related_name="spcloffertwo_products",on_delete=models.CASCADE, null=True)
     spcloffertwocommission =models.CharField(max_length=20,null=True)
-    spcloffertwoimage = CloudinaryField(folder="img/", null=True)
+    spcloffertwoimage = CloudinaryField("image",folder="img/", null=True)
     
     def __str__(self):
         return self.title

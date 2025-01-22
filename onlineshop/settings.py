@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import cloudinary
 from pathlib import Path
-import cloudinary.uploader
-import cloudinary.api
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -68,13 +67,8 @@ cloudinary.config(
     api_key="885758177362334",
     api_secret="2snd5n3R1uZicMT6vF6BElqp0EY"
 )
-"""
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dtn2ei68w',
-    'API_KEY': '885758177362334',
-    'API_SECRET': '2snd5n3R1uZicMT6vF6BElqp0EY',
-}
-"""
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 TEMPLATES = [
     {
