@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from cloudinary.models import CloudinaryField
-
+import cloudinary.uploader
 
 #tutor register
 class User(AbstractUser):
@@ -31,8 +31,14 @@ class category(models.Model):
         
 class Product_image(models.Model):
     name = models.CharField(max_length=50, null=True,unique=True)
-    image = CloudinaryField( folder="img/", null=True)
-    
+    image = models.URLField(max_length=500, blank=True, null=True)
+
+    def upload_image_to_cloudinary(self, file):
+        # Upload the file to the img/ folder on Cloudinary
+        response = cloudinary.uploader.upload(file, folder='img/')
+        # Save the secure URL to the model
+        self.image = response['secure_url']
+        self.save()
     def __str__(self):
         return self.name 
     def get_absolute_url(self):
